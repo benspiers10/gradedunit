@@ -1,50 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import $ from "jquery";
 // import logo from './logo.svg';
 import './App.css';
 
 function App() {
-  const [name, setName] = useState("");
-  const [result, setResult] = useState("");
-
-  const handleChange = (e) => {
-      setName(e.target.value);
-  };
-
-  const handleSubmit = (e) => {
-      e.preventDefault();
-      const form = $(e.target);
-      $.ajax({
-          type: "POST",
-          url: form.attr("action"),
-          data: form.serialize(),
-          success(data) {
-              setResult(data);
-          },
-      });
-  };
+    const [data, setData] = useState([])
+    useEffect(()=> {
+        fetch('http://localhost:8081/users')
+        .then(res => res.json())
+        .then(data => setData(data))
+        .then(err => console.log(err));
+    }, [])
 
   return (
       <div className="App">
-          <form
-              action="http://localhost:8000/server.php"
-              method="post"
-              onSubmit={(event) => handleSubmit(event)}
-          >
-              <label htmlFor="name">Name: </label>
-              <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={name}
-                  onChange={(event) =>
-                      handleChange(event)
-                  }
-              />
-              <br />
-              <button type="submit">Submit</button>
-          </form>
-          <h1>{result}</h1>
+        <table>
+            <thead>
+                <th>ID</th>
+                <th>UserName</th>
+                <th>Password</th>
+                <th>Email</th>
+            </thead>
+
+            <tbody>
+                {data.map((d, i) => (
+                    <tr key={i}>
+                        <td>{d.id}</td>
+                        <td>{d.username}</td>
+                        <td>{d.password}</td>
+                        <td>{d.email}</td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
       </div>
   );
 }
