@@ -14,12 +14,12 @@ function App() {
 
   return (
       <div className="App">
-        <table>
+        <table >
             <thead>
-                <th>ID</th>
-                <th>UserName</th>
-                <th>Password</th>
-                <th>Email</th>
+                <th className="bg-orange-600 p-3">ID</th>
+                <th className="bg-red-600 p-3">Username</th>
+                <th className="bg-blue-600 p-3">Helper</th>
+                <th className="bg-green-600 p-3">Email</th>
             </thead>
 
             <tbody>
@@ -27,7 +27,7 @@ function App() {
                     <tr key={i}>
                         <td>{d.id}</td>
                         <td>{d.username}</td>
-                        <td>{d.password}</td>
+                        <td>{d.helper}</td>
                         <td>{d.email}</td>
                     </tr>
                 ))}
