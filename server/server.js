@@ -10,6 +10,7 @@ const db = mysql.createConnection({
     user: 'root',
     password: '',
     database: 'scouts_db'
+
 })
 
 app.get('/', (re,res)=> {
@@ -25,5 +26,5 @@ app.get('/users', (req, res)=> {
 })
 
 app.listen(8081, ()=> {
-    console.log("listening");
+    console.log("listening to db");
 })
