@@ -81,7 +81,7 @@ const Nav = () => {
           <AiOutlineMenu size={30} />
         </div>
         <h1 className="text-2xl sm:text-3xl lg:text-4xl px-2">
-          Obanshite <span className="font-bold">Scouts</span>
+          Obanshire <span className="font-bold">Scouts</span>
         </h1>
       </div>
 
