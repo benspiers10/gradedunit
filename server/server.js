@@ -12,23 +12,23 @@ app.use(cors());
 const db = mysql.createConnection({
     connectLimit : 10,
     host: "localhost",
-    user: 'scoutsdbuser',
-    password: ')Csd(_@[8Z7]X@9s',
+    user: 'root',
+    password: '',
     database: 'scouts_db'
 
 })
 
 const saltRounds = 10;
 
-app.post('/signup', (re,res)=> {
+app.post('/signup', (req, res)=> {
     const username = req.body.username;
-    const password = req.body.password;
     const email = req.body.email;
+    const password = req.body.password;
     bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
         if (err) {
             res.status(418).send(`Couldn't hash password.`)
         } else {
-            db.query("INSERT INTO users (username, password, email) VALUES (?, ?, ?)", [username. hashedPassword, email], (err, result) => {
+            db.query("INSERT INTO users (username, password, email) VALUES (?, ?, ?)", [username, hashedPassword, email], (err, result) => {
                 if (err) {
                     res.status(418).send(`Couldn't register user.`)
                 } else {
