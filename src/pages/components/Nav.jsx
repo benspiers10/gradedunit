@@ -116,17 +116,12 @@ const Nav = () => {
           </div>
           </Link>
 
-          <Link to="/Dash">
+          <Link to="/Register">
           <div>
-          <h1>Dashboard</h1>
+          <h1>Register</h1>
           </div>
           </Link>
 
-          <Link to="/">
-          <div>
-          <h1>NHS Inform</h1>
-          </div>
-          </Link>
 
           {/* <button onClick={handleLogout}>Logout</button> */}
           

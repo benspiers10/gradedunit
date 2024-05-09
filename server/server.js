@@ -1,17 +1,44 @@
 const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
+const bodyParser = require('body-parser')
+const bcrypt = require('bcrypt')
 
 const app = express();
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 app.use(cors());
 
 const db = mysql.createConnection({
+    connectLimit : 10,
     host: "localhost",
-    user: 'root',
-    password: '',
+    user: 'scoutsdbuser',
+    password: ')Csd(_@[8Z7]X@9s',
     database: 'scouts_db'
 
 })
+
+const saltRounds = 10;
+
+app.post('/signup', (re,res)=> {
+    const username = req.body.username;
+    const password = req.body.password;
+    const email = req.body.email;
+    bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
+        if (err) {
+            res.status(418).send(`Couldn't hash password.`)
+        } else {
+            db.query("INSERT INTO users (username, password, email) VALUES (?, ?, ?)", [username. hashedPassword, email], (err, result) => {
+                if (err) {
+                    res.status(418).send(`Couldn't register user.`)
+                } else {
+                    res.send({username: username})
+                }
+            })
+        }
+    })
+})
+
 
 app.get('/', (re,res)=> {
     return res.json("From Backend side");
@@ -26,5 +53,5 @@ app.get('/users', (req, res)=> {
 })
 
 app.listen(8081, ()=> {
-    console.log("listening to db");
+    console.log("server is listening to port 8081");
 })

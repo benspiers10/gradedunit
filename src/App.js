@@ -3,14 +3,14 @@ import { BrowserRouter, Route, Routes} from 'react-router-dom';
 // import logo from './logo.svg';
 import './App.css';
 import Home from './pages/shared/Home';
-import Login from './pages/shared/Login';
+import Register from './pages/shared/Register';
 
 const App = () => {
     return (
         <BrowserRouter>
          <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/Login" element={<Login />} />
+          <Route path="/Register" element={<Register/>} />
           {/* <Route path="/Dash" element={<Dash />} />
           <Route path="/ParentDash" element={<ParentDash />} />
           <Route path="/Department" element={<Department />} />
