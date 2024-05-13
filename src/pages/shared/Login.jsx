@@ -1,110 +1,46 @@
-// import React, { useEffect, useState } from 'react';
-// import axios from 'axios';
-// import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { Navigate } from "react-router-dom";
+import { signin } from "../../store/authSlice";
+import './login.css';
+import { useDispatch, useSelector } from "react-redux";
 
-// const Login = () => {
-//   const [patientNumber, setPatientNumber] = useState('');
-//   const [password, setPassword] = useState('');
-//   const [parent, setParent] = useState(false); // state for the checkbox
-//   const navigate = useNavigate();
+// import exp from "constants";
 
-//   const handleLogin = async (e) => {
-//     e.preventDefault();
-//     console.log('Making login request with:', { patientNumber, password });
-//     try {
-//       const response = await axios.post('http://localhost:5000/api/login', {
-//         patientNumber,
-//         password,
-//       });
-      
-//       // Handle successful login
-//       console.log('Login Successful')
-//       const { token } = response.data;
-//       localStorage.setItem('Token', token);
+function Login() {
 
-//       if (parent) {
-//         navigate('/ParentDash');
-//       } else {
-//         navigate('/Dash');
-//       }
-//     } catch (error) {
-//       if (error.response && error.response.status === 401) {
-//         console.error('Login failed: Invalid credentials');
-//         alert('Login failed: Invalid credentials');
-//         // Handle unauthorized access
-//       } else {
-//         console.error('Login failed:', error.message);
-//         alert('Login failed:', error.message);
-//         // Handle other errors
-//       }
-//     }
-//   };
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const user = useSelector((state) => state.auth.user)
+    const error = useSelector((state) => state.auth.error)
+    const dispatch = useDispatch()
 
-//   useEffect(() => {
-//     const storedParent = localStorage.getItem('parent');
-//     if (storedParent) {
-//       const parsedParent = JSON.parse(storedParent);
-//       setParent(parsedParent);
-//     }
-//   }, []);
+    const submitHandler = e => {
+        e.preventDefault()
+        dispatch(signin({username, password}))
+        .then(() => {
+            setUsername('')
+            setPassword('')
+        })
+    }
 
-//   return (
-//     <>
-// <div className='min-h-screen flex items-center justify-center dark:bg-gray-950'>
-// 	<div className='bg-white dark:bg-gray-900 shadow-md rounded-lg px-8 py-6 max-w-md'>
+    return (
+        <div>
+            <form className="mx-auto border-2 p-9 md:p-12 w-72 md:w-96 border-cyan-400 mt-36 h-84" onSubmit={submitHandler}>
+                <h3 className="pb-6 text-2xl text-center">Sign In</h3>
+                <label className="block mb-1 text-xl text-cyan-400" htmlFor="username">Username</label>
+                <input className="w-full h-8 p-1 mb-6 focus:outline-none bg-red-300" type="text" name="username" id="username" required value={username} onChange={(e) => setUsername(e.target.value)}/>
+                <label className="block mb-1 text-xl text-cyan-400" htmlFor="password">Password</label>
+                <input className="w-full h-8 p-1 mb-6 focus:outline-none bg-red-300" type="password" name="password" id="password" required  value={password} onChange={(e) => setPassword(e.target.value)}/>
+            <div className="flex justify-between">
+                <button className="px-3 py-3 rounded-sm bg-cyan-400" type='button'>Cancel</button>
+            <   button className="px-3 py-3 rounded-sm bg-cyan-400" type='submit'>Sign In</button>
+            </div>
+            {error ? <p className="pb-6 text-2xl text-center text-red-600">{error}</p> : null}
+            {user ? <Navigate to='/Profile' replace={true} /> : null}
+            </form>
 
-// 		<h1 className='text-2xl font-bold text-center mb-4 dark:text-gray-200'>Welcome Back!</h1>
-// 		<form>
-// 			<div className='mb-4'>
-// 				<label for='patientNumber' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>Patient Number</label>
-//         <input
-//           className='border rounded-lg shadow-md min-w-[500px] p-2 text-left'
-//           type='string'
-//           id='patientNumber'
-//           placeholder='Patient Number'
-//           onChange={(e) => setPatientNumber(e.target.value)}
-//           value={patientNumber}
-//         />
-// 			</div>
-// 			<div className='mb-4'>
-// 				<label for='password' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>Password</label>
-// 				<input
-//           className='border rounded-lg shadow-md min-w-[500px] p-2 text-left'
-//           type='password'
-//           id='string'
-//           placeholder='Password'
-//           onChange={(e) => setPassword(e.target.value)}
-//           value={password}
-//         />
-//         <label htmlFor='parentStatus' className='flex items-center gap-2'>
-//           Parent/Guardian?
-//           <input
-//             type='checkbox'
-//             id='parentStatus'
-//             name='parentStatus'
-//             onChange={(e) => setParent(e.target.checked)}
-//             value={parent}
-//           />
-//         </label>
-// 				<a href='#'
-// 					class='text-xs text-gray-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>Forgot
-// 					Password?</a>
-// 			</div>
-// 			<div className='btn_container mt-10 text-center'>
-//         <input
-//           onClick={handleLogin}
-//           type='submit'
-//           className='text-2xl bg-[#1C3925] text-white min-w-[250px] px-2 py-3 rounded-full shadow-lg font-body cursor-pointer hover:translate-y-2 transition-transform'
-//         />
-//         <div className='forgot_password my-2 text-blue-700 cursor-pointer'>
-//           Forgot Password?
-//         </div>
-//       </div> 
-// 		</form>
-// 	</div>
-// </div>
-//     </>
-//   );
-// };
+        </div>
+    );
+}
 
-// export default Login;
+export default Login;

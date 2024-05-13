@@ -2,7 +2,8 @@ const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
 const bodyParser = require('body-parser')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const { match } = require('assert');
 
 const app = express();
 app.use(bodyParser.urlencoded({extended: false}));
@@ -37,6 +38,30 @@ app.post('/signup', (req, res)=> {
             })
         }
     })
+})
+
+app.post('/signin', (req, res)=> {
+
+    const username = req.body.username;
+    const password = req.body.password;
+
+            db.query("SELECT * FROM users WHERE username = ?", [username], (err, result) => {
+                if (err) {
+                    res.status(418).send(err.message)
+                } else if (result.length < 1) {
+                    res.send(418).send(`Username doesn't match.`)
+                } else {
+                    bcrypt.compare(password, result[0].password, (err, match) => {
+                    if (match) {
+                        res.send({username})
+                    }
+                    if (!match) {
+                        res.status(418).send(`Password doesn't match.`)
+                    }
+                    })
+                }
+            })
+    
 })
 
 
