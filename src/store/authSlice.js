@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const signup = createAsyncThunk('auth/signup', async({username, password, email}) => {
+export const signup = createAsyncThunk('auth/signup', async({username, password, email, helper}) => {
     try {
-        const res = await axios.post('http://localhost:8081/signup', {username, password, email});
+        const res = await axios.post('http://localhost:8081/signup', {username, password, email, helper});
         return res.data;
     } catch (err) {
         console.log(err)

@@ -31,9 +31,8 @@ function Login() {
                 <input className="w-full h-8 p-1 mb-6 focus:outline-none bg-red-300" type="text" name="username" id="username" required value={username} onChange={(e) => setUsername(e.target.value)}/>
                 <label className="block mb-1 text-xl text-cyan-400" htmlFor="password">Password</label>
                 <input className="w-full h-8 p-1 mb-6 focus:outline-none bg-red-300" type="password" name="password" id="password" required  value={password} onChange={(e) => setPassword(e.target.value)}/>
-            <div className="flex justify-between">
-                <button className="px-3 py-3 rounded-sm bg-cyan-400" type='button'>Cancel</button>
-            <   button className="px-3 py-3 rounded-sm bg-cyan-400" type='submit'>Sign In</button>
+            <div className="flex justify-between"> 
+            <button className="w-full px-3 py-3 rounded-sm bg-cyan-400" type='submit'>Sign In</button>
             </div>
             {error ? <p className="pb-6 text-2xl text-center text-red-600">{error}</p> : null}
             {user ? <Navigate to='/Profile' replace={true} /> : null}

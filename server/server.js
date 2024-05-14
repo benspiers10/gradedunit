@@ -25,11 +25,12 @@ app.post('/signup', (req, res)=> {
     const username = req.body.username;
     const email = req.body.email;
     const password = req.body.password;
+    const helper = req.body.helper;
     bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
         if (err) {
             res.status(418).send(`Couldn't hash password.`)
         } else {
-            db.query("INSERT INTO users (username, password, email) VALUES (?, ?, ?)", [username, hashedPassword, email], (err, result) => {
+            db.query("INSERT INTO users (username, password, email, helper) VALUES (?, ?, ?, ?)", [username, hashedPassword, email, helper], (err, result) => {
                 if (err) {
                     res.status(418).send(`Couldn't register user.`)
                 } else {
