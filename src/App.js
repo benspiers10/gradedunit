@@ -1,15 +1,38 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { logout, signin } from './store/authSlice';
 import { BrowserRouter, Route, Routes} from 'react-router-dom';
 // import axios from 'axios';
 import './App.css';
 import Home from './pages/shared/Home';
 import Register from './pages/shared/Register';
-import Profile from './pages/users/UserDash';
 import Login from './pages/shared/Login';
+import Dash from './pages/users/Dash';
+import AdminDash from './pages/admin/AdminDash';
+import HelperDash from './pages/helper/HelperDash';
 import Error from './pages/shared/Error';
 import RootLayout from './layouts/RootLayout';
 
 const App = () => {
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        // Check for token on page load
+        const token = localStorage.getItem("token");
+        const username = localStorage.getItem("username");
+        const role = localStorage.getItem("role");
+        if (token && username && role) {
+          // Set user as authenticated with username and role
+          dispatch(signin.fulfilled({ username, role, token }));
+        } else {
+          // User is not authenticated
+          // Dispatch an action to logout
+          dispatch(logout());
+        }
+      }, [dispatch]); // Run the effect only once on component mount
+    
+
     return (
         <BrowserRouter>
         <Routes>
@@ -17,11 +40,11 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/Register" element={<Register />} />
           <Route path="/Login" element={<Login />} />
-          <Route path="/Profile" element={<Profile />} />
+          <Route path="/Dash" element={<Dash />} />
+          <Route path="/AdminDash" element={<AdminDash />} />
+          <Route path="/HelperDash" element={<HelperDash />} />
           <Route path="*" element={<Error />} />
-          {/* <Route path="/Dash" element={<Dash />} />
-          <Route path="/ParentDash" element={<ParentDash />} />
-          <Route path="/Department" element={<Department />} />
+          {/*
           <Route path="/Doctor" element={<Doctor />} />
           <Route path="/Appointment" element={<Appointment />} />
           <Route path="/Games" element={<Games />} /> */}

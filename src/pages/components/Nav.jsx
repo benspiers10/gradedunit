@@ -1,14 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom"; 
-// import UserInfo from '../components/UserInfo'
-// import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/authSlice";
 
-
 const Nav = () => {
-  const loggedIn = useSelector((state) => state.auth.isLoggedIn)
-  const dispatch = useDispatch()
+  const loggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const role = useSelector((state) => state.auth.role);
+  const dispatch = useDispatch();
 
   return (
     <div className="max-w-[1640px] mx-auto flex justify-between items-center p-4 shadow-sm bg-[#0c76ff]">
@@ -18,69 +16,82 @@ const Nav = () => {
         </h1>
       </div>
 
-        { loggedIn ? 
-          <div className="flex items-center gap-8 ml-10">
-                <Link to="/">
-                <div>
-                <h1>Home</h1>
-                </div>
-                </Link>
+      <div className="flex items-center gap-8 ml-10">
+        <Link to="/">
+          <div>
+            <h1>Home</h1>
+          </div>
+        </Link>
 
-                <Link to="/Profile">
-                <div>
-                <h1>Profile</h1>
-                </div>
+        {loggedIn && (
+          <>
+            {role === 2 && (
+              <>
+                <Link to="/AdminDash">
+                  <div>
+                    <h1>Admin Dashboard</h1>
+                  </div>
                 </Link>
+              </>
+            )}
 
-                <Link to="/Gallery">
+            {role === 1 && (
+              <Link to="/HelperDash">
                 <div>
+                  <h1>Helper Dashboard</h1>
+                </div>
+              </Link>
+            )}
+
+            {role === 0 && (
+              <Link to="/Dash">
+                <div>
+                  <h1>Dashboard</h1>
+                </div>
+              </Link>
+            )}
+
+            <Link to="/gallery">
+              <div>
                 <h1>Gallery</h1>
-                </div>
-                </Link>
+              </div>
+            </Link>
 
-                <Link className="pl-20 color-red-500" to="/"onClick={() => dispatch(logout())}>
-                Logout
-                </Link>
-          </div>
+            <Link className="text-red-500" to="/" onClick={() => dispatch(logout())}>
+              Logout
+            </Link>
+          </>
+        )}
 
-            :
-
-          <div className="flex items-center gap-8 ml-10">
-                <Link to="/">
-                <div>
-                <h1>Home</h1>
-                </div>
-                </Link>
-
-                <Link to="/Info">
-                <div>
+        {!loggedIn && (
+          <>
+            <Link to="/info">
+              <div>
                 <h1>Whats On</h1>
-                </div>
-                </Link>
+              </div>
+            </Link>
 
-                <Link to="/Badges">
-                <div>
+            <Link to="/badges">
+              <div>
                 <h1>Badges</h1>
-                </div>
-                </Link>
+              </div>
+            </Link>
 
-                <Link to="/Register">
-                <div>
+            <Link to="/register">
+              <div>
                 <h1>Register</h1>
-                </div>
-                </Link>
+              </div>
+            </Link>
 
-                <Link to="/Login">
-                <div>
+            <Link to="/login">
+              <div>
                 <h1>Login</h1>
-                </div>
-                </Link>
-                
-          </div>
-         }
-
+              </div>
+            </Link>
+          </>
+        )}
       </div>
-
+    </div>
   );
 };
 

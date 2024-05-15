@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
 import { signin } from "../../store/authSlice";
 import './login.css';
 import { useDispatch, useSelector } from "react-redux";
+import RedirectComponent from "../components/RedirectComponent";
 
 // import exp from "constants";
 
@@ -35,7 +35,7 @@ function Login() {
             <button className="w-full px-3 py-3 rounded-sm bg-cyan-400" type='submit'>Sign In</button>
             </div>
             {error ? <p className="pb-6 text-2xl text-center text-red-600">{error}</p> : null}
-            {user ? <Navigate to='/Profile' replace={true} /> : null}
+            {user ? <RedirectComponent /> : null}
             </form>
 
         </div>
