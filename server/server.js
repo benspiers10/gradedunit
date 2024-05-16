@@ -1,3 +1,4 @@
+//created const to grab all packages
 const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
@@ -5,12 +6,15 @@ const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt');
 const { match } = require('assert');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const path = require('node:path'); 
 
 const app = express();
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(cors());
 
+//creating database connection using mysql database created and root connector
 const db = mysql.createConnection({
     connectLimit : 10,
     host: "localhost",
@@ -20,8 +24,38 @@ const db = mysql.createConnection({
 
 })
 
+const PORT = process.env.PORT || 8081;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send({ error: 'Something went wrong!' });
+});
+
+// app.get('/', (re,res)=> {
+//     return res.json("From Backend side");
+// })
+
+
 const saltRounds = 10;
 const jwtSecretKey = 'your_secret_key'; // Set your secret key for JWT
+
+//creating a storage name and place middleware for file upload
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, '../public/images/gallery')
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+    }
+})
+
+const upload = multer({
+    storage: storage
+})
 
 // Function to generate JWT token
 const generateToken = (username, role) => {
@@ -30,7 +64,6 @@ const generateToken = (username, role) => {
 
 // role corresponds to 0 = scout, 1 = helper, 2 = ADMIN
 app.post('/signup', (req, res)=> {
-
     const username = req.body.username;
     const email = req.body.email;
     const password = req.body.password;
@@ -82,22 +115,78 @@ app.post('/signin', (req, res) => {
     });
 });
 
+// Submit image to gallery
+app.post('/gallery', upload.single('image'), async (req, res) => {
+    const { title, content, location } = req.body;
+    const filePath = req.file.path;
+    const approvalStatus = 1; // Set initial approval status to pending
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send({ error: 'Something went wrong!' });
+    const sql = 'INSERT INTO gallery (title, content, location, gal_img, pending) VALUES (?, ?, ?, ?, ?)';
+    const values = [title, content, location, filePath, approvalStatus];
+
+    try {
+        await db.query(sql, values);
+        res.status(201).json({ message: 'Image submitted for approval' });
+    } catch (error) {
+        console.error('Error submitting image:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
 
-const PORT = process.env.PORT || 8081;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+// Get pending images for approval
+app.get('/gallery/pending', async (req, res) => {
+    const sql = 'SELECT * FROM gallery WHERE pending = 1';
+
+    try {
+        const results = await db.query(sql);
+        console.log("Pending Images Results:", results); // Log the results
+        const images = results.map(row => ({
+            gallery_id: row.gallery_id,
+            title: row.title,
+            content: row.content,
+            location: row.location,
+            gal_img: row.gal_img,
+            pending: row.pending
+        }));
+        res.status(200).json(images);
+    } catch (error) {
+        console.error('Error fetching pending images:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
 
 
-app.get('/', (re,res)=> {
-    return res.json("From Backend side");
-})
+
+// Get approved images
+app.get('/gallery/approved', async (req, res) => {
+    const sql = 'SELECT * FROM gallery WHERE pending = 0';
+
+    try {
+        const results = await db.query(sql);
+        res.status(200).json(results);
+    } catch (error) {
+        console.error('Error fetching approved images:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Approve or reject image
+app.patch('/gallery/:id', async (req, res) => {
+    const { id } = req.params;
+    const { approvalStatus } = req.body;
+
+    const sql = 'UPDATE gallery SET pending = ? WHERE gallery_id = ?';
+    const values = [approvalStatus, id];
+
+    try {
+        await db.query(sql, values);
+        res.status(200).json({ message: 'Image status updated successfully' });
+    } catch (error) {
+        console.error('Error updating image status:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 
 app.get('/users', (req, res)=> {
     const sql = "SELECT * FROM users";

@@ -51,9 +51,15 @@ const Nav = () => {
               </Link>
             )}
 
-            <Link to="/gallery">
+            <Link to="/Gallery">
               <div>
                 <h1>Gallery</h1>
+              </div>
+            </Link>
+
+            <Link to="/badges">
+              <div>
+                <h1>Badges</h1>
               </div>
             </Link>
 
