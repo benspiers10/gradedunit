@@ -1,10 +1,8 @@
-//created const to grab all packages
 const express = require('express');
-const mysql = require('mysql');
+const mysql = require('mysql2/promise');
 const cors = require('cors');
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt');
-const { match } = require('assert');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('node:path'); 
@@ -15,14 +13,12 @@ app.use(bodyParser.json());
 app.use(cors());
 
 //creating database connection using mysql database created and root connector
-const db = mysql.createConnection({
-    connectLimit : 10,
+const dbConfig = {
     host: "localhost",
     user: 'root',
     password: '',
     database: 'scouts_db'
-
-})
+};
 
 const PORT = process.env.PORT || 8081;
 app.listen(PORT, () => {
@@ -34,11 +30,6 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send({ error: 'Something went wrong!' });
 });
-
-// app.get('/', (re,res)=> {
-//     return res.json("From Backend side");
-// })
-
 
 const saltRounds = 10;
 const jwtSecretKey = 'your_secret_key'; // Set your secret key for JWT
@@ -63,56 +54,48 @@ const generateToken = (username, role) => {
 };
 
 // role corresponds to 0 = scout, 1 = helper, 2 = ADMIN
-app.post('/signup', (req, res)=> {
-    const username = req.body.username;
-    const email = req.body.email;
-    const password = req.body.password;
-    const role = req.body.role;
+app.post('/signup', async (req, res) => {
+    const { username, email, password, role } = req.body;
 
-    bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
-        if (err) {
-            res.status(418).send(`Couldn't hash password.`)
-        } else {
-            db.query("INSERT INTO users (username, password, email, role) VALUES (?, ?, ?, ?)", [username, hashedPassword, email, role], (err, result) => {
-                if (err) {
-                    res.status(418).send(`Couldn't register user.`)
-                } else {
-                    const token = generateToken(username, role); // Generate JWT token
-                    res.send({ username, role, token }); // Send token in response
-                }
-            })
-        }
-    })
-    
-})
+    try {
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        const connection = await mysql.createConnection(dbConfig);
+        await connection.execute("INSERT INTO users (username, password, email, role) VALUES (?, ?, ?, ?)", [username, hashedPassword, email, role]);
+        connection.end();
 
-app.post('/signin', (req, res) => {
-    const username = req.body.username;
-    const password = req.body.password;
+        const token = generateToken(username, role);
+        res.send({ username, role, token }); // Send token in response
+    } catch (err) {
+        res.status(500).send(`Couldn't register user.`);
+    }
+});
+
+app.post('/signin', async (req, res) => {
+    const { username, password } = req.body;
 
     if (!username || !password) {
         return res.status(400).send({ error: 'Username and password are required' });
     }
 
-    db.query("SELECT * FROM users WHERE username = ?", [username], (err, result) => {
-        if (err) {
-            return res.status(500).send({ error: 'Internal server error' });
-        } 
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        const [result] = await connection.execute("SELECT * FROM users WHERE username = ?", [username]);
+        connection.end();
+
         if (result.length < 1) {
             return res.status(401).send({ error: 'Invalid username or password' });
-        } 
-        bcrypt.compare(password, result[0].password, (err, match) => {
-            if (err) {
-                return res.status(500).send({ error: 'Internal server error' });
-            }
-            if (match) {
-                const token = generateToken(username, result[0].role); // Generate JWT token
-                return res.status(200).json({ username, role: result[0].role, token }); // Include token in the response
-            } else {
-                return res.status(401).send({ error: 'Invalid username or password' });
-            }
-        });
-    });
+        }
+
+        const match = await bcrypt.compare(password, result[0].password);
+        if (match) {
+            const token = generateToken(username, result[0].role); // Generate JWT token
+            return res.status(200).json({ username, role: result[0].role, token }); // Include token in the response
+        } else {
+            return res.status(401).send({ error: 'Invalid username or password' });
+        }
+    } catch (err) {
+        return res.status(500).send({ error: 'Internal server error' });
+    }
 });
 
 // Submit image to gallery
@@ -125,7 +108,10 @@ app.post('/gallery', upload.single('image'), async (req, res) => {
     const values = [title, content, location, filePath, approvalStatus];
 
     try {
-        await db.query(sql, values);
+        const connection = await mysql.createConnection(dbConfig);
+        await connection.execute(sql, values);
+        connection.end();
+
         res.status(201).json({ message: 'Image submitted for approval' });
     } catch (error) {
         console.error('Error submitting image:', error);
@@ -138,8 +124,10 @@ app.get('/gallery/pending', async (req, res) => {
     const sql = 'SELECT * FROM gallery WHERE pending = 1';
 
     try {
-        const results = await db.query(sql);
-        console.log("Pending Images Results:", results); // Log the results
+        const connection = await mysql.createConnection(dbConfig);
+        const [results] = await connection.execute(sql);
+        connection.end();
+
         const images = results.map(row => ({
             gallery_id: row.gallery_id,
             title: row.title,
@@ -155,14 +143,15 @@ app.get('/gallery/pending', async (req, res) => {
     }
 });
 
-
-
 // Get approved images
 app.get('/gallery/approved', async (req, res) => {
     const sql = 'SELECT * FROM gallery WHERE pending = 0';
 
     try {
-        const results = await db.query(sql);
+        const connection = await mysql.createConnection(dbConfig);
+        const [results] = await connection.execute(sql);
+        connection.end();
+
         res.status(200).json(results);
     } catch (error) {
         console.error('Error fetching approved images:', error);
@@ -179,7 +168,10 @@ app.patch('/gallery/:id', async (req, res) => {
     const values = [approvalStatus, id];
 
     try {
-        await db.query(sql, values);
+        const connection = await mysql.createConnection(dbConfig);
+        await connection.execute(sql, values);
+        connection.end();
+
         res.status(200).json({ message: 'Image status updated successfully' });
     } catch (error) {
         console.error('Error updating image status:', error);
@@ -187,12 +179,16 @@ app.patch('/gallery/:id', async (req, res) => {
     }
 });
 
-
-app.get('/users', (req, res)=> {
+app.get('/users', async (req, res) => {
     const sql = "SELECT * FROM users";
-    db.query(sql, (err, data)=> {
-        if(err) return res.json(err);
-        return res.json(data);
-    })
-})
 
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        const [data] = await connection.execute(sql);
+        connection.end();
+
+        return res.json(data);
+    } catch (err) {
+        return res.json(err);
+    }
+});

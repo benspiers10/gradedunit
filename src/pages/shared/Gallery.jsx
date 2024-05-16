@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-
 const Gallery = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const role = parseInt(localStorage.getItem("role")); // Get user role from localStorage
   console.log("Role:", role);
@@ -13,17 +13,18 @@ const Gallery = () => {
     const fetchImages = async () => {
       try {
         setLoading(true);
+        setError(null); // Reset the error state before making the request
         let response;
         if (role === 2) {
           response = await axios.get('http://localhost:8081/gallery/pending'); // Fetch pending images for role 2
         } else {
           response = await axios.get('http://localhost:8081/gallery/approved'); // Fetch approved images for other roles
         }
-        console.log("Response:", response); // Add this line to log the response
+        console.log("Response:", response); // Log the response
         setImages(response.data);
       } catch (error) {
         console.error('Error fetching images:', error);
-        // Add code to handle errors (e.g., display an error message)
+        setError('Failed to fetch images. Please try again later.');
       } finally {
         setLoading(false);
       }
@@ -31,7 +32,6 @@ const Gallery = () => {
   
     fetchImages(); // Call fetchImages
   }, [role]);
-  
 
   const handleApproval = async (id, approvalStatus) => {
     try {
@@ -60,6 +60,8 @@ const Gallery = () => {
       <h2>Gallery</h2>
       {loading ? (
         <p>Loading...</p>
+      ) : error ? (
+        <p>{error}</p>
       ) : (
         <div>
           {images.map(image => (
