@@ -34,15 +34,20 @@ app.use((err, req, res, next) => {
 const saltRounds = 10;
 const jwtSecretKey = 'your_secret_key'; // Set your secret key for JWT
 
+
+// Serve static files from the public directory
+app.use('public/images/gallery', express.static(path.join(__dirname, '../public/images/gallery')));
+
 //creating a storage name and place middleware for file upload
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, '../public/images/gallery')
+        cb(null, path.join(__dirname, '../public/images/gallery'));
     },
     filename: (req, file, cb) => {
-        cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+        cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
     }
-})
+});
+
 
 const upload = multer({
     storage: storage
@@ -98,10 +103,11 @@ app.post('/signin', async (req, res) => {
     }
 });
 
+
 // Submit image to gallery
 app.post('/gallery', upload.single('image'), async (req, res) => {
     const { title, content, location } = req.body;
-    const filePath = req.file.path;
+    const filePath = path.join('images/gallery', req.file.filename);
     const approvalStatus = 1; // Set initial approval status to pending
 
     const sql = 'INSERT INTO gallery (title, content, location, gal_img, pending) VALUES (?, ?, ?, ?, ?)';
@@ -118,6 +124,7 @@ app.post('/gallery', upload.single('image'), async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
 
 // Get pending images for approval
 app.get('/gallery/pending', async (req, res) => {
@@ -178,6 +185,25 @@ app.patch('/gallery/:id', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+// Delete an image
+app.delete('/gallery/:id', async (req, res) => {
+    const { id } = req.params;
+
+    const sql = 'DELETE FROM gallery WHERE gallery_id = ?';
+
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        await connection.execute(sql, [id]);
+        connection.end();
+
+        res.status(200).json({ message: 'Image deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting image:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 
 app.get('/users', async (req, res) => {
     const sql = "SELECT * FROM users";

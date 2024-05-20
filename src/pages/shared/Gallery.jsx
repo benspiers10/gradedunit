@@ -7,7 +7,6 @@ const Gallery = () => {
   const [error, setError] = useState(null);
 
   const role = parseInt(localStorage.getItem("role")); // Get user role from localStorage
-  console.log("Role:", role);
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -29,31 +28,32 @@ const Gallery = () => {
         setLoading(false);
       }
     };
-  
+
     fetchImages(); // Call fetchImages
   }, [role]);
 
   const handleApproval = async (id, approvalStatus) => {
     try {
-      await axios.patch(`/gallery/${id}`, { approvalStatus });
+      await axios.patch(`http://localhost:8081/gallery/${id}`, { approvalStatus });
       setImages(prevImages =>
         prevImages.map(image =>
-          image.gallery_id === id ? { ...image, pending: approvalStatus === 1 ? true : false } : image
+          image.gallery_id === id ? { ...image, pending: approvalStatus } : image
         )
       );
     } catch (error) {
       console.error('Error updating image status:', error);
     }
   };
-
+  
   const handleDelete = async id => {
     try {
-      await axios.delete(`/gallery/${id}`);
-      setImages(prevImages => prevImages.filter(image => image.gallery_id !== id));
+        await axios.delete(`http://localhost:8081/gallery/${id}`);
+        setImages(prevImages => prevImages.filter(image => image.gallery_id !== id));
     } catch (error) {
-      console.error('Error deleting image:', error);
+        console.error('Error deleting image:', error);
     }
-  };
+};
+
 
   return (
     <div>
@@ -66,12 +66,14 @@ const Gallery = () => {
         <div>
           {images.map(image => (
             <div key={image.gallery_id}>
-              <img src={image.gal_img} alt={image.title} />
-              <p>Status: {image.pending === 1 ? 'Pending' : 'Approved'}</p>
+              <img src={image.gal_img} alt={image.content} />
+              <p>{image.title}</p>
+              <p>{image.location}</p>
               {role === 2 && image.pending === 1 && (
                 <div>
-                  <button onClick={() => handleApproval(image.gallery_id, 0)}>Approve</button>
-                  <button onClick={() => handleDelete(image.gallery_id)}>Delete</button>
+                  <p>Status: {image.pending === 1 ? 'Pending' : 'Approved'}</p>
+                  <button className='px-3 py-3 rounded-sm bg-cyan-400' onClick={() => handleApproval(image.gallery_id, 0)}>Approve</button>
+                  <button className='px-3 py-3 rounded-sm bg-red-400' onClick={() => handleDelete(image.gallery_id)}>Delete</button>
                 </div>
               )}
             </div>
