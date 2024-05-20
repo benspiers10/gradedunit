@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 07, 2024 at 08:56 PM
+-- Generation Time: May 20, 2024 at 07:18 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -24,6 +24,71 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `badges`
+--
+
+CREATE TABLE `badges` (
+  `badge_id` int(11) NOT NULL,
+  `badge_name` varchar(100) NOT NULL,
+  `badge_img` blob DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contactinformation`
+--
+
+CREATE TABLE `contactinformation` (
+  `contact_id` int(11) NOT NULL,
+  `user_fk` int(11) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `events`
+--
+
+CREATE TABLE `events` (
+  `event_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` text DEFAULT NULL,
+  `location` varchar(100) DEFAULT NULL,
+  `posted_by` varchar(32) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gallery`
+--
+
+CREATE TABLE `gallery` (
+  `gallery_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` text DEFAULT NULL,
+  `location` varchar(255) DEFAULT NULL,
+  `posted_by` varchar(255) DEFAULT NULL,
+  `gal_img` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `pending` int(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `gallery`
+--
+
+INSERT INTO `gallery` (`gallery_id`, `title`, `content`, `location`, `posted_by`, `gal_img`, `created_at`, `pending`) VALUES
+(6, 'te', 'te', 'te', NULL, 'images\\gallery\\image_1716225264554.png', '2024-05-20 17:14:24', 0),
+(7, 'Bacon De Kevin', 'THis is a hi', 'Lol meme', NULL, 'images\\gallery\\image_1716225424908.png', '2024-05-20 17:17:04', 0);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -32,8 +97,7 @@ CREATE TABLE `users` (
   `username` varchar(32) NOT NULL,
   `password` varchar(264) NOT NULL,
   `email` varchar(64) NOT NULL,
-  `helper` tinyint(4) DEFAULT NULL,
-  `is_admin` int(11) NOT NULL,
+  `role` tinyint(4) DEFAULT NULL,
   `img_path` varchar(128) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -41,15 +105,26 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `email`, `helper`, `is_admin`, `img_path`) VALUES
-(14, 'admin', '$2y$10$bihFWrC8SLISdric/zq8lecnOKhO908Dkn8Hh43SZQ4bRmJ/h2yyC', 'admin@email.com', 1, 1, NULL),
-(36, 'karen', '$2y$10$Nz00s6i686VAYUrgYYGxYunOyJcNEjEaFdAaglSpFo2OpBT5FKIDu', 'karen@email.com', 0, 0, 'theatreiconlight.png'),
-(38, 'paul', '$2y$10$o300/7Wb2UoC7BUtAEI4EONA6BPJyBHlXiIb1GVHeHoBdUSZZHEV6', 'karen@email.com', 0, 0, 'user6.png'),
-(39, 'treacle', '$2y$10$L7aLXRyuF1bXJAGaOn4Epu8EiRRSUErIy16KqFCnG7SZkaFkGh2ii', 'treacle@email.com', 1, 0, NULL);
+INSERT INTO `users` (`id`, `username`, `password`, `email`, `role`, `img_path`) VALUES
+(92, 'admin', '$2b$10$z1LK6z8RWuMLum03IW6wF.WF2KfQYVFw4vd7wI1JuusQiqguA1MC2', 'admin@mail.com', 2, NULL),
+(93, 'ben', '$2b$10$Kl7p0VR67a0TpVjxujqgFuovLoOQkVgzy6g9VEv3gLiIB1cWvNFvK', 'ben@helper.com', 1, NULL),
+(94, 'james', '$2b$10$64CW/dor3v5pgFxMvW5Xou/XzrI3WOw/7HPXSg0SOH6qyz2YOdiI.', 'james@scout.com', 0, NULL);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `badges`
+--
+ALTER TABLE `badges`
+  ADD PRIMARY KEY (`badge_id`);
+
+--
+-- Indexes for table `gallery`
+--
+ALTER TABLE `gallery`
+  ADD PRIMARY KEY (`gallery_id`);
 
 --
 -- Indexes for table `users`
@@ -62,10 +137,16 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `gallery`
+--
+ALTER TABLE `gallery`
+  MODIFY `gallery_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
