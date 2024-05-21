@@ -47,6 +47,7 @@ const Badges = () => {
             <h2 className='pb-6 pt-10 text-2xl text-center'>Badges</h2>
             <div className="search-container">
                 <input
+                    className='border-2 border-gray-300 bg-white h-10 px-5 pr-16 m-5 rounded-lg text-sm focus:outline-none'
                     type="text"
                     placeholder="Search badges..."
                     value={searchTerm}
@@ -65,7 +66,7 @@ const Badges = () => {
                             <h3 className='text-xl text-center'>{badge.badge_name}</h3>
                             {expandedBadgeId === badge.badge_id && (
                                 <div>
-                                    <p>{badge.badge_info}</p>
+                                    <p className='py-4'>{badge.badge_info}</p>
                                     <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={() => toggleExpansion(badge.badge_id)}>Hide Description</button>
                                 </div>
                             )}
