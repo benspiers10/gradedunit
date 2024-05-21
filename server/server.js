@@ -35,8 +35,11 @@ const saltRounds = 10;
 const jwtSecretKey = 'your_secret_key'; // Set your secret key for JWT
 
 
-// Serve static files from the public directory
-app.use('public/images/gallery', express.static(path.join(__dirname, '../public/images/gallery')));
+// Serve static files from the public directory for gallery
+app.use('/images/gallery', express.static(path.join(__dirname, '../public/images/gallery')));
+
+// Serve static files from the public directory for badges
+app.use('/images/badges', express.static(path.join(__dirname, '../public/images/badges')));
 
 //creating a storage name and place middleware for file upload
 const storage = multer.diskStorage({
@@ -200,6 +203,22 @@ app.delete('/gallery/:id', async (req, res) => {
         res.status(200).json({ message: 'Image deleted successfully' });
     } catch (error) {
         console.error('Error deleting image:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Fetch badges from the database
+app.get('/badges', async (req, res) => {
+    const sql = 'SELECT * FROM badges';
+
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        const [results] = await connection.execute(sql);
+        connection.end();
+
+        res.status(200).json(results);
+    } catch (error) {
+        console.error('Error fetching badges:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
