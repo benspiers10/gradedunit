@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 20, 2024 at 07:18 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Generation Time: May 21, 2024 at 05:01 PM
+-- Server version: 10.4.20-MariaDB
+-- PHP Version: 8.0.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -30,8 +30,21 @@ SET time_zone = "+00:00";
 CREATE TABLE `badges` (
   `badge_id` int(11) NOT NULL,
   `badge_name` varchar(100) NOT NULL,
-  `badge_img` blob DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `badge_info` varchar(455) DEFAULT NULL,
+  `badge_img` varchar(64) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `badges`
+--
+
+INSERT INTO `badges` (`badge_id`, `badge_name`, `badge_info`, `badge_img`) VALUES
+(2, 'Artistic Badge', 'Fill in after', 'artist.png'),
+(3, 'Astronomer Badge', 'Fill in after', 'astronomer.png'),
+(4, 'Communication Badge', 'Fill in after', 'communicate.png'),
+(5, 'Crafting Badge', 'Fill in after', 'craft.png'),
+(6, 'Cycling Badge', 'Fill in after', 'cyclist.png'),
+(7, 'DIY Badge', 'Fill in after', 'diy.png');
 
 -- --------------------------------------------------------
 
@@ -45,7 +58,7 @@ CREATE TABLE `contactinformation` (
   `address` varchar(255) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -59,7 +72,7 @@ CREATE TABLE `events` (
   `content` text DEFAULT NULL,
   `location` varchar(100) DEFAULT NULL,
   `posted_by` varchar(32) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -76,7 +89,7 @@ CREATE TABLE `gallery` (
   `gal_img` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `pending` int(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `gallery`
@@ -99,7 +112,7 @@ CREATE TABLE `users` (
   `email` varchar(64) NOT NULL,
   `role` tinyint(4) DEFAULT NULL,
   `img_path` varchar(128) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users`
@@ -135,6 +148,12 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `badges`
+--
+ALTER TABLE `badges`
+  MODIFY `badge_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `gallery`

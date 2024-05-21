@@ -57,7 +57,7 @@ const Gallery = () => {
 
   return (
     <div>
-      <h2>Gallery</h2>
+      <h2 className='pb-6 pt-10 text-2xl text-center'>Gallery</h2>
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -72,8 +72,8 @@ const Gallery = () => {
               {role === 2 && image.pending === 1 && (
                 <div>
                   <p>Status: {image.pending === 1 ? 'Pending' : 'Approved'}</p>
-                  <button className='px-3 py-3 rounded-sm bg-cyan-400' onClick={() => handleApproval(image.gallery_id, 0)}>Approve</button>
-                  <button className='px-3 py-3 rounded-sm bg-red-400' onClick={() => handleDelete(image.gallery_id)}>Delete</button>
+                  <button className='px-3 py-3 rounded-sm bg-green-500' onClick={() => handleApproval(image.gallery_id, 0)}>Approve</button>
+                  <button className='px-3 py-3 rounded-sm bg-red-500' onClick={() => handleDelete(image.gallery_id)}>Delete</button>
                 </div>
               )}
             </div>

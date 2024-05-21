@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signup } from "../../store/authSlice";
 // import { Navigate } from "react-router-dom";
-import './register.css';
+import '../shared/css/register.css';
 import RedirectComponent from "../components/RedirectComponent";
 
 // import exp from "constants";

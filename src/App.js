@@ -11,6 +11,7 @@ import Dash from './pages/users/Dash';
 import AdminDash from './pages/admin/AdminDash';
 import HelperDash from './pages/helper/HelperDash';
 import Gallery from './pages/shared/Gallery';
+import Badges from './pages/shared/Badges';
 import Error from './pages/shared/Error';
 import RootLayout from './layouts/RootLayout';
 
@@ -45,6 +46,7 @@ const App = () => {
           <Route path="/AdminDash" element={<AdminDash />} />
           <Route path="/HelperDash" element={<HelperDash />} />
           <Route path="/Gallery" element={<Gallery />} />
+          <Route path="/Badges" element={<Badges />} />
           <Route path="*" element={<Error />} />
           {/*
           <Route path="/Doctor" element={<Doctor />} />

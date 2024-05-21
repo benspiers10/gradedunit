@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { signin } from "../../store/authSlice";
-import './login.css';
+import '../shared/css/login.css';
 import { useDispatch, useSelector } from "react-redux";
 import RedirectComponent from "../components/RedirectComponent";
 
