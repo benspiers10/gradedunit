@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 21, 2024 at 11:08 PM
+-- Generation Time: May 23, 2024 at 01:19 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -82,6 +82,13 @@ CREATE TABLE `events` (
   `posted_by` varchar(32) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `events`
+--
+
+INSERT INTO `events` (`event_id`, `title`, `content`, `location`, `eve_img`, `posted_by`) VALUES
+(0, 'y', 'y', 'y', 'images\\events\\image_1716416002464.png', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -127,9 +134,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `email`, `role`, `img_path`) VALUES
-(92, 'admin', '$2b$10$z1LK6z8RWuMLum03IW6wF.WF2KfQYVFw4vd7wI1JuusQiqguA1MC2', 'admin@mail.com', 2, NULL),
-(93, 'ben', '$2b$10$Kl7p0VR67a0TpVjxujqgFuovLoOQkVgzy6g9VEv3gLiIB1cWvNFvK', 'ben@helper.com', 1, NULL),
-(94, 'james', '$2b$10$64CW/dor3v5pgFxMvW5Xou/XzrI3WOw/7HPXSg0SOH6qyz2YOdiI.', 'james@scout.com', 0, NULL);
+(92, 'admin', '$2b$10$z1LK6z8RWuMLum03IW6wF.WF2KfQYVFw4vd7wI1JuusQiqguA1MC2', 'admin@mail.com', 2, 'images\\profileimg\\profileImage_1716418718429.jpg'),
+(93, 'ben', '$2b$10$Kl7p0VR67a0TpVjxujqgFuovLoOQkVgzy6g9VEv3gLiIB1cWvNFvK', 'ben@helper.com', 1, 'images\\profileimg\\profileImage_1716419365408.png'),
+(94, 'robbie', '$2b$10$64CW/dor3v5pgFxMvW5Xou/XzrI3WOw/7HPXSg0SOH6qyz2YOdiI.', 'robbiemoment@scout.com', 0, 'images\\profileimg\\profileImage_1716419284130.jpg');
 
 --
 -- Indexes for dumped tables
@@ -140,6 +147,12 @@ INSERT INTO `users` (`id`, `username`, `password`, `email`, `role`, `img_path`) 
 --
 ALTER TABLE `badges`
   ADD PRIMARY KEY (`badge_id`);
+
+--
+-- Indexes for table `events`
+--
+ALTER TABLE `events`
+  ADD UNIQUE KEY `event_id` (`event_id`);
 
 --
 -- Indexes for table `gallery`
