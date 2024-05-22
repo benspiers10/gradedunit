@@ -1,20 +1,22 @@
 import { useSelector } from "react-redux"
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './css/admindash.css';
+
 
 const AdminDash = () => {
 
     const user = useSelector((state) => state.auth.user)
     return (
-        <div>
-            <h3 className="pb-6 text-2xl text-center">Profile</h3>
-            {user ? <h4 className="text-xl text-center">Hi, {user}! This is the admin "2" dashboard. </h4> : null}
-
-            <h1 className="pb-6 pt-10 text-2xl text-center">User list link</h1>
-
-            <h1 className="pb-6 pt-10 text-2xl text-center">Adding events</h1>
-
-            <p className="pb-6 text-center"> I wish for all of these to be links/buttons</p>
+        <div className="dashboard">
+            <h2 className='text-center text-2xl pb-6'>Dashboard, Welcome {user}!</h2>
+            <div className="button-grid">
+                <Link to="/Profile" className="dashboard-button">Profile</Link>
+                <Link to="/UserList" className="dashboard-button">User List</Link>
+                <Link to="/EventUpload" className="dashboard-button">Event Upload</Link>
+            </div>
         </div>
-    )
-}
+    );
+};
 
 export default AdminDash;

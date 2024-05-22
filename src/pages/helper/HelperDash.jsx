@@ -1,20 +1,24 @@
 import { useSelector } from "react-redux"
-import FileUpload from "../components/FileUpload"
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './css/helperdash.css';
 
-const HelperDash = () => {
+const Dash = () => {
 
     const user = useSelector((state) => state.auth.user)
     return (
         <div>
-            <h3 className="pb-6 pt-10 text-2xl text-center">Profile</h3>
-            {user ? <h4 className="text-xl text-center">Hi, {user}! This is the helper "1" dashboard.</h4> : null}
-
-            <h3 className="pb-6 pt-10 text-2xl text-center">Upload to the gallery here</h3>
-            <FileUpload />
-
-            <h3 className="pb-6 pt-10 text-2xl text-center">Availibility here</h3>
+            <div className="dashboard">
+            <h2 className='text-center text-2xl pb-6'>Dashboard, Welcome {user}!</h2>
+            <div className="button-grid">
+                <Link to="/Profile" className="dashboard-button">Profile</Link>
+                <Link to="/FileUpload" className="dashboard-button">File Upload</Link>
+                <Link to="/HelperAvail" className="dashboard-button">Availability</Link>
+                <Link to="/Training" className="dashboard-button">Training</Link>
+            </div>
+        </div>
         </div>
     )
 }
 
-export default HelperDash;
+export default Dash;

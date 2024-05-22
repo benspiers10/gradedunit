@@ -35,21 +35,28 @@ const saltRounds = 10;
 const jwtSecretKey = 'your_secret_key'; // Set your secret key for JWT
 
 
-// Serve static files from the public directory for gallery
+// Serve static files from the public directory
 app.use('/images/gallery', express.static(path.join(__dirname, '../public/images/gallery')));
-
-// Serve static files from the public directory for badges
 app.use('/images/badges', express.static(path.join(__dirname, '../public/images/badges')));
+app.use('/images/events', express.static(path.join(__dirname, '../public/images/events')));
+app.use('/images/profileimg', express.static(path.join(__dirname, '../public/images/profileimg')));
 
-//creating a storage name and place middleware for file upload
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '../public/images/gallery'));
+        if (file.fieldname === 'profileImage') {
+            cb(null, path.join(__dirname, '../public/images/profileimg'));
+        } else if (file.fieldname === 'events'){
+            cb(null, path.join(__dirname, '../public/images/events'));
+        } else {
+            cb(null, path.join(__dirname, '../public/images/gallery'));
+        }
     },
     filename: (req, file, cb) => {
         cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
     }
 });
+
 
 
 const upload = multer({
@@ -223,7 +230,30 @@ app.get('/badges', async (req, res) => {
     }
 });
 
+// Submit event to events page  
+app.post('/events', upload.single('image'), async (req, res) => {
+    const { title, content, location } = req.body;
+    const filePath = path.join('images/events', req.file.filename);
 
+    const sql = 'INSERT INTO events (title, content, location, eve_img) VALUES (?, ?, ?, ?)';
+    const values = [title, content, location, filePath];
+
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        await connection.execute(sql, values);
+        connection.end();
+
+        res.status(201).json({ message: 'Event Submitted' });
+    } catch (error) {
+        console.error('Error submitting:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+
+// Server-side changes in your Express server
+
+// Get all users
 app.get('/users', async (req, res) => {
     const sql = "SELECT * FROM users";
 
@@ -234,6 +264,69 @@ app.get('/users', async (req, res) => {
 
         return res.json(data);
     } catch (err) {
-        return res.json(err);
+        return res.status(500).json(err);
+    }
+});
+
+// Delete a user by ID
+app.delete('/users/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        const [result] = await connection.execute("DELETE FROM users WHERE user_id = ?", [id]);
+        connection.end();
+
+        if (result.affectedRows > 0) {
+            res.status(200).json({ message: 'User deleted successfully' });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (err) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Get user profile by username
+app.get('/users/:username', async (req, res) => {
+    const { username } = req.params;
+
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        const [results] = await connection.execute("SELECT username, email, role, img_path FROM users WHERE username = ?", [username]);
+        connection.end();
+
+        if (results.length > 0) {
+            res.status(200).json(results[0]);
+        } else {
+            res.status(404).json({ error: 'User not found' });
+        }
+    } catch (error) {
+        console.error('Error fetching user profile:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Update user profile
+app.put('/users/:username', upload.single('profileImage'), async (req, res) => {
+    const { username } = req.params;
+    const { email, newUsername } = req.body;
+    let profileImagePath = null;
+
+    if (req.file) {
+        profileImagePath = path.join('images/profileimg', req.file.filename);
+    }
+
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        const sql = "UPDATE users SET email = ?, username = ?, img_path = ? WHERE username = ?";
+        const values = [email, newUsername, profileImagePath, username];
+        await connection.execute(sql, values);
+        connection.end();
+
+        res.status(200).json({ message: 'Profile updated successfully' });
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });

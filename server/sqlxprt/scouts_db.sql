@@ -78,6 +78,7 @@ CREATE TABLE `events` (
   `title` varchar(255) NOT NULL,
   `content` text DEFAULT NULL,
   `location` varchar(100) DEFAULT NULL,
+  `eve_img` varchar(255) DEFAULT NULL,
   `posted_by` varchar(32) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

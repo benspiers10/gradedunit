@@ -1,16 +1,21 @@
 import { useSelector } from "react-redux"
-import FileUpload from "../components/FileUpload";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './css/dash.css';
 
 const Dash = () => {
 
     const user = useSelector((state) => state.auth.user)
     return (
         <div>
-            <h3 className="pb-6 text-2xl text-center">Profile</h3>
-            {user ? <h4 className="text-xl text-center">Hi, {user}!, This is the scout "0" dashboard. </h4> : null}
-
-            <h3 className="pb-6 text-2xl text-center">Upload to the gallery here</h3>
-            <FileUpload />
+            <div className="dashboard">
+            <h2 className='text-center text-2xl pb-6'>Dashboard, Welcome {user}!</h2>
+            <div className="button-grid">
+                <Link to="/Profile" className="dashboard-button">Profile</Link>
+                <Link to="/FileUpload" className="dashboard-button">File Upload</Link>
+                <Link to="/BadgeProg" className="dashboard-button">Badge Progress</Link>
+            </div>
+        </div>
         </div>
     )
 }

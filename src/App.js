@@ -14,11 +14,14 @@ import Gallery from './pages/shared/Gallery';
 import Badges from './pages/shared/Badges';
 import Error from './pages/shared/Error';
 import RootLayout from './layouts/RootLayout';
+import UserList from './pages/admin/UserList';
+import EventUpload from './pages/admin/EventUpload';
+import FileUpload from './pages/components/FileUpload';
+import Profile from './pages/shared/Profile';
 
 const App = () => {
 
     const dispatch = useDispatch();
-
     useEffect(() => {
         // Check for token on page load
         const token = localStorage.getItem("token");
@@ -47,11 +50,11 @@ const App = () => {
           <Route path="/HelperDash" element={<HelperDash />} />
           <Route path="/Gallery" element={<Gallery />} />
           <Route path="/Badges" element={<Badges />} />
+          <Route path="/UserList" element={<UserList />} />
+          <Route path="/EventUpload" element={<EventUpload />} />
+          <Route path="/FileUpload" element={<FileUpload />} />
+          <Route path="/Profile" element={<Profile />} />
           <Route path="*" element={<Error />} />
-          {/*
-          <Route path="/Doctor" element={<Doctor />} />
-          <Route path="/Appointment" element={<Appointment />} />
-          <Route path="/Games" element={<Games />} /> */}
          </Route>
          </Routes>
         </BrowserRouter>
