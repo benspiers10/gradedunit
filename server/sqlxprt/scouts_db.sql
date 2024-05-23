@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 23, 2024 at 01:19 AM
+-- Generation Time: May 23, 2024 at 09:11 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -78,16 +78,16 @@ CREATE TABLE `events` (
   `title` varchar(255) NOT NULL,
   `content` text DEFAULT NULL,
   `location` varchar(100) DEFAULT NULL,
-  `eve_img` varchar(255) DEFAULT NULL,
-  `posted_by` varchar(32) DEFAULT NULL
+  `eve_img` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `events`
 --
 
-INSERT INTO `events` (`event_id`, `title`, `content`, `location`, `eve_img`, `posted_by`) VALUES
-(0, 'y', 'y', 'y', 'images\\events\\image_1716416002464.png', NULL);
+INSERT INTO `events` (`event_id`, `title`, `content`, `location`, `eve_img`) VALUES
+(1, 'Event 1', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin convallis, turpis sed viverra tempor, tellus elit gravida arcu, eget vestibulum est est ut ex. Duis id tincidunt sem. Aliquam ultrices leo ut est vestibulum rutrum. Nulla urna ipsum, dignissim ac pellentesque in, facilisis quis tortor. Ut at quam sagittis libero posuere cursus. Sed molestie tortor at risus vehicula, eget laoreet justo laoreet. Fusce turpis lacus, fermentum vitae neque id, lobortis aliquam dolor. Fusce tempor nec nulla sit amet sodales. Fusce eget lacinia neque.  Nulla nec enim ac justo pulvinar lacinia. Quisque consequat, lacus sed dignissim sagittis, eros elit imperdiet sem, eget vulputate ex lectus et urna. Aliquam posuere consectetur erat, at tristique arcu bibendum non. Morbi et rhoncus ex, a pellentesque lacus. Vivamus ullamcorper pulvinar sem, vel vestibulum nisi mollis ac. Integer laoreet massa nulla, sit amet cursus ipsum blandit sed. Nunc ullamcorper vulputate lectus non scelerisque. Nullam non turpis in dui hendrerit porta.', 'Karrigan Lodge, DE', 'images\\events\\image_1716475124867.jpg'),
+(2, 'Event 2', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin convallis, turpis sed viverra tempor, tellus elit gravida arcu, eget vestibulum est est ut ex. Duis id tincidunt sem. Aliquam ultrices leo ut est vestibulum rutrum. Nulla urna ipsum, dignissim ac pellentesque in, facilisis quis tortor. Ut at quam sagittis libero posuere cursus. Sed molestie tortor at risus vehicula, eget laoreet justo laoreet. Fusce turpis lacus, fermentum vitae neque id, lobortis aliquam dolor. Fusce tempor nec nulla sit amet sodales. Fusce eget lacinia neque.\r\n\r\nNulla nec enim ac justo pulvinar lacinia. Quisque consequat, lacus sed dignissim sagittis, eros elit imperdiet sem, eget vulputate ex lectus et urna. Aliquam posuere consectetur erat, at tristique arcu bibendum non. Morbi et rhoncus ex, a pellentesque lacus. Vivamus ullamcorper pulvinar sem, vel vestibulum nisi mollis ac. Integer laoreet massa nulla, sit amet cursus ipsum blandit sed. Nunc ullamcorper vulputate lectus non scelerisque. Nullam non turpis in dui hendrerit porta.', 'Dunskey Castle, SCO', 'images\\events\\eventImage_1716476157549.jpg');
 
 -- --------------------------------------------------------
 
@@ -117,26 +117,98 @@ INSERT INTO `gallery` (`gallery_id`, `title`, `content`, `location`, `posted_by`
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `helper_availability`
+--
+
+CREATE TABLE `helper_availability` (
+  `availability_id` int(11) NOT NULL,
+  `helper_id` int(11) DEFAULT NULL,
+  `available_day` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `helper_availability`
+--
+
+INSERT INTO `helper_availability` (`availability_id`, `helper_id`, `available_day`) VALUES
+(35, 2, 'Tuesday'),
+(36, 2, 'Wednesday'),
+(37, 2, 'Friday'),
+(38, 2, 'Saturday'),
+(39, 3, 'Tuesday'),
+(40, 3, 'Monday');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `helper_registration_requests`
+--
+
+CREATE TABLE `helper_registration_requests` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` enum('pending','approved','denied') NOT NULL DEFAULT 'pending'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `helper_registration_requests`
+--
+
+INSERT INTO `helper_registration_requests` (`id`, `user_id`, `created_at`, `status`) VALUES
+(2, 5, '2024-05-23 18:51:19', 'approved'),
+(3, 9, '2024-05-23 19:01:23', 'denied');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `training_applications`
+--
+
+CREATE TABLE `training_applications` (
+  `application_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `training_type` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `training_applications`
+--
+
+INSERT INTO `training_applications` (`application_id`, `name`, `email`, `training_type`, `created_at`) VALUES
+(1, 'ben', 'ben@helper.com', 'Type A', '2024-05-23 17:42:34');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
-  `username` varchar(32) NOT NULL,
-  `password` varchar(264) NOT NULL,
-  `email` varchar(64) NOT NULL,
-  `role` tinyint(4) DEFAULT NULL,
-  `img_path` varchar(128) DEFAULT NULL
+  `user_id` int(11) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` int(11) NOT NULL,
+  `img_path` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `email`, `role`, `img_path`) VALUES
-(92, 'admin', '$2b$10$z1LK6z8RWuMLum03IW6wF.WF2KfQYVFw4vd7wI1JuusQiqguA1MC2', 'admin@mail.com', 2, 'images\\profileimg\\profileImage_1716418718429.jpg'),
-(93, 'ben', '$2b$10$Kl7p0VR67a0TpVjxujqgFuovLoOQkVgzy6g9VEv3gLiIB1cWvNFvK', 'ben@helper.com', 1, 'images\\profileimg\\profileImage_1716419365408.png'),
-(94, 'robbie', '$2b$10$64CW/dor3v5pgFxMvW5Xou/XzrI3WOw/7HPXSg0SOH6qyz2YOdiI.', 'robbiemoment@scout.com', 0, 'images\\profileimg\\profileImage_1716419284130.jpg');
+INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `role`, `img_path`) VALUES
+(1, 'admin', 'admin@admin.com', '$2b$10$O9QS2GfcEyiop7G/EdoyBuzAmzzBqzwIciBqZJVGBoPjcR9huVxay', 3, 'images\\profileimg\\profileImage_1716479263040.jpg'),
+(2, 'ben', 'ben@helper.com', '$2b$10$thEMByfEhl6OtO2aUgIrw.dzf4iRrrdBn2uVlclfDbkOpqOrt0hwa', 2, 'images\\profileimg\\profileImage_1716479285546.png'),
+(3, 'robbie', 'robbie@helper.com', '$2b$10$GHxh.fqT6k9Mt5zcoqedYey17UDLucyuBWK54nLaDMT9WlBtGvRRy', 2, NULL),
+(4, 'craig', 'craig@helper.com', '$2b$10$3lUdNhP3bjt2SqfETLsUP.8VtgjYbELychT9MENpqhaErMyJd/u2i', 2, NULL),
+(5, 'hamish', 'hamish@scout.com', '$2b$10$qfp/wuQMVmjSzKH0CG/VPOkVx8qWrfyjaBYn3h0Z1nAUwhcFbdyk.', 2, NULL),
+(6, 'jonas', 'jonas@scout.com', '$2b$10$YCiGfWQHsW3YTHO/uXjF..Koq4lVMtOSHEA.l/icPG.h2XiCoI8sW', 1, NULL),
+(7, 'jeff', 'jeff@scout.com', '$2b$10$tVtqjMeUpgOFE6pGreiypu8MIxfSUgch.NI57/B3yLtDtJYR7VbnO', 0, NULL),
+(8, 'sam', 'sam@scout.com', '$2b$10$gEYXgCEsfOoz55HPqt4NsOAdfVJtHj1h4TbLax82NrytQ8rOS2muO', 0, NULL),
+(9, 'jammin', 'jamming123', '$2b$10$GiX5Exx1wQ7vHCPcMzZa5OjElq8Qlm568ee4ggqWKpc7qHYpTF0yS', 1, NULL);
 
 --
 -- Indexes for dumped tables
@@ -152,7 +224,8 @@ ALTER TABLE `badges`
 -- Indexes for table `events`
 --
 ALTER TABLE `events`
-  ADD UNIQUE KEY `event_id` (`event_id`);
+  ADD UNIQUE KEY `event_id` (`event_id`),
+  ADD UNIQUE KEY `event_id_2` (`event_id`);
 
 --
 -- Indexes for table `gallery`
@@ -161,10 +234,30 @@ ALTER TABLE `gallery`
   ADD PRIMARY KEY (`gallery_id`);
 
 --
+-- Indexes for table `helper_availability`
+--
+ALTER TABLE `helper_availability`
+  ADD PRIMARY KEY (`availability_id`),
+  ADD KEY `fk_helper_id` (`helper_id`);
+
+--
+-- Indexes for table `helper_registration_requests`
+--
+ALTER TABLE `helper_registration_requests`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_user_id` (`user_id`);
+
+--
+-- Indexes for table `training_applications`
+--
+ALTER TABLE `training_applications`
+  ADD PRIMARY KEY (`application_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`user_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -177,16 +270,56 @@ ALTER TABLE `badges`
   MODIFY `badge_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
+-- AUTO_INCREMENT for table `events`
+--
+ALTER TABLE `events`
+  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `gallery`
 --
 ALTER TABLE `gallery`
   MODIFY `gallery_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
+-- AUTO_INCREMENT for table `helper_availability`
+--
+ALTER TABLE `helper_availability`
+  MODIFY `availability_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+
+--
+-- AUTO_INCREMENT for table `helper_registration_requests`
+--
+ALTER TABLE `helper_registration_requests`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `training_applications`
+--
+ALTER TABLE `training_applications`
+  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `helper_availability`
+--
+ALTER TABLE `helper_availability`
+  ADD CONSTRAINT `fk_helper_id` FOREIGN KEY (`helper_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `helper_registration_requests`
+--
+ALTER TABLE `helper_registration_requests`
+  ADD CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
