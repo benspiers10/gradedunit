@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux"
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './css/helperdash.css';
+import './css/parentdash.css';
 
-const Dash = () => {
+const ParentDash = () => {
 
     const user = useSelector((state) => state.auth.user)
     return (
@@ -13,12 +13,11 @@ const Dash = () => {
             <div className="button-grid">
                 <Link to="/Profile" className="dashboard-button">Profile</Link>
                 <Link to="/FileUpload" className="dashboard-button">File Upload</Link>
-                <Link to="/Availability" className="dashboard-button">Availability</Link>
-                <Link to="/Training" className="dashboard-button">Training</Link>
+                <Link to="/RegisterHelper" className="dashboard-button">Register to become a Helper</Link>
             </div>
         </div>
         </div>
     )
 }
 
-export default Dash;
+export default ParentDash;

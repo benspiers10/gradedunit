@@ -104,7 +104,7 @@ const Profile = () => {
                 <>
                     <p>Username: {profile.username}</p>
                     <p>Email: {profile.email}</p>
-                    <p>Role: {profile.role === 2 ? 'Admin' : profile.role === 1 ? 'Helper' : 'Scout'}</p>
+                    <p>Role: {profile.role === 3 ? 'Admin' : profile.role === 2 ? 'Helper' : profile.role === 1 ? 'Parent' : 'Scout'}</p>
                     <button className="profile-btn" onClick={() => setEditMode(true)}>Edit</button>
                 </>
             )}

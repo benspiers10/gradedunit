@@ -14,6 +14,7 @@ const AdminDash = () => {
                 <Link to="/Profile" className="dashboard-button">Profile</Link>
                 <Link to="/UserList" className="dashboard-button">User List</Link>
                 <Link to="/EventUpload" className="dashboard-button">Event Upload</Link>
+                <Link to="/HelperApplications" className="dashboard-button">Helper Applications</Link>
             </div>
         </div>
     );

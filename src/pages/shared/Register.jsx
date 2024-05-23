@@ -47,7 +47,7 @@ function Register() {
                 <input className="w-full h-8 p-1 mb-6 focus:outline-none bg-red-300" type="password" name="password" id="password" required value={password} onChange={(e) => setPassword(e.target.value)}/>
                 <label className="block mb-1 text-xl text-cyan-400" htmlFor="email">E-mail</label>
                 <input className="w-full h-8 p-1 mb-6 focus:outline-none bg-red-300" type="text" name="email" id="email" required value={email} onChange={(e) => setEmail(e.target.value)}/>
-                <label className="block mb-1 text-xl text-cyan-400" htmlFor="role">Helper?</label>
+                <label className="block mb-1 text-xl text-cyan-400" htmlFor="role">Parent/Guardian?</label>
                 <input className="p-1 mb-6 focus:outline-none" type="checkbox" name="role" id="role" value={roleChecked} onChange={handleCheckboxChange}/>
             <div className="flex justify-between">
             <button className="w-full px-3 py-3 rounded-sm bg-cyan-400" type='submit'>Submit</button>

@@ -13,10 +13,12 @@ const RedirectComponent = ({ to }) => {
 
     // Redirect based on user role
     switch (role) {
-        case 2 :
+        case 3 :
             return <Navigate to="/AdminDash" />;
-        case 1:
+        case 2:
             return <Navigate to="/HelperDash" />;
+        case 1:
+            return <Navigate to="/ParentDash" />;
         case 0:
             return <Navigate to="/Dash" />;
         default:

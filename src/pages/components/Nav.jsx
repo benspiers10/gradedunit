@@ -25,7 +25,7 @@ const Nav = () => {
 
         {loggedIn && (
           <>
-            {role === 2 && (
+            {role === 3 && (
               <>
                 <Link to="/AdminDash">
                   <div>
@@ -35,10 +35,18 @@ const Nav = () => {
               </>
             )}
 
-            {role === 1 && (
+            {role === 2 && (
               <Link to="/HelperDash">
                 <div>
                   <h1>Helper Dashboard</h1>
+                </div>
+              </Link>
+            )}
+
+            {role === 1 && (
+              <Link to="/ParentDash">
+                <div>
+                  <h1>Dashboard</h1>
                 </div>
               </Link>
             )}
@@ -57,7 +65,7 @@ const Nav = () => {
               </div>
             </Link>
 
-            <Link to="/badges">
+            <Link to="/Badges">
               <div>
                 <h1>Badges</h1>
               </div>
@@ -71,25 +79,25 @@ const Nav = () => {
 
         {!loggedIn && (
           <>
-            <Link to="/info">
+            <Link to="/Events">
               <div>
                 <h1>Whats On</h1>
               </div>
             </Link>
 
-            <Link to="/badges">
+            <Link to="/Badges">
               <div>
                 <h1>Badges</h1>
               </div>
             </Link>
 
-            <Link to="/register">
+            <Link to="/Register">
               <div>
                 <h1>Register</h1>
               </div>
             </Link>
 
-            <Link to="/login">
+            <Link to="/Login">
               <div>
                 <h1>Login</h1>
               </div>

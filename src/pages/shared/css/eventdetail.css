@@ -1,0 +1,18 @@
+.event-detail-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+}
+
+.event-title {
+    font-size: 2em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.event-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
