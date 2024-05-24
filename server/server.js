@@ -297,19 +297,25 @@ app.get('/events/:id', async (req, res) => {
 
 
 // Get all users
+// Fetch all users with their training status
 app.get('/users', async (req, res) => {
-    const sql = "SELECT * FROM users";
+    const sql = `
+        SELECT user_id AS id, username, email, role, img_path, training_status
+        FROM users
+    `;
 
     try {
         const connection = await mysql.createConnection(dbConfig);
-        const [data] = await connection.execute(sql);
+        const [results] = await connection.execute(sql);
         connection.end();
 
-        return res.json(data);
-    } catch (err) {
-        return res.status(500).json(err);
+        res.status(200).json(results);
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
+
 
 // Delete a user by ID
 app.delete('/users/:id', async (req, res) => {
@@ -330,43 +336,47 @@ app.delete('/users/:id', async (req, res) => {
     }
 });
 
-// Get user profile by username
-app.get('/users/:username', async (req, res) => {
-    const { username } = req.params;
-
-    try {
-        const connection = await mysql.createConnection(dbConfig);
-        const [results] = await connection.execute("SELECT username, email, role, img_path FROM users WHERE username = ?", [username]);
-        connection.end();
-
-        if (results.length > 0) {
-            res.status(200).json(results[0]);
-        } else {
-            res.status(404).json({ error: 'User not found' });
-        }
-    } catch (error) {
-        console.error('Error fetching user profile:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-// Update user profile
 app.put('/users/:username', upload.single('profileImage'), async (req, res) => {
     const { username } = req.params;
-    const { email, newUsername } = req.body;
+    const { email, firstname, surname, address, phone } = req.body;
     let profileImagePath = null;
-
-    if (req.file) {
-        profileImagePath = path.join('images/profileimg', req.file.filename);
-    }
 
     try {
         const connection = await mysql.createConnection(dbConfig);
-        const sql = "UPDATE users SET email = ?, username = ?, img_path = ? WHERE username = ?";
-        const values = [email, newUsername, profileImagePath, username];
-        await connection.execute(sql, values);
-        connection.end();
 
+        // Fetch the user ID and existing profile image path based on the username
+        const [userResult] = await connection.execute("SELECT user_id, img_path FROM users WHERE username = ?", [username]);
+        if (userResult.length === 0) {
+            throw new Error('User not found');
+        }
+        const user = userResult[0];
+        profileImagePath = user.img_path; // Keep the existing image path
+
+        // If a new file is uploaded, update the profile image path
+        if (req.file) {
+            profileImagePath = path.join('images/profileimg', req.file.filename);
+        }
+
+        // Update the user's profile
+        const sql = "UPDATE users SET email = ?, img_path = ? WHERE username = ?";
+        const values = [email, profileImagePath, username];
+        await connection.execute(sql, values);
+
+        // Insert or update contact information
+        const [contactInfoResult] = await connection.execute("SELECT * FROM contact_information WHERE user_fk = ?", [user.user_id]);
+        if (contactInfoResult.length > 0) {
+            // Update existing contact information
+            const updateContactInfoSql = "UPDATE contact_information SET firstname = ?, surname = ?, address = ?, phone = ? WHERE user_fk = ?";
+            const updateContactInfoValues = [firstname, surname, address, phone, user.user_id];
+            await connection.execute(updateContactInfoSql, updateContactInfoValues);
+        } else {
+            // Insert new contact information
+            const insertContactInfoSql = "INSERT INTO contact_information (user_fk, firstname, surname, address, phone) VALUES (?, ?, ?, ?, ?)";
+            const insertContactInfoValues = [user.user_id, firstname, surname, address, phone];
+            await connection.execute(insertContactInfoSql, insertContactInfoValues);
+        }
+
+        connection.end();
         res.status(200).json({ message: 'Profile updated successfully' });
     } catch (error) {
         console.error('Error updating profile:', error);
@@ -374,8 +384,50 @@ app.put('/users/:username', upload.single('profileImage'), async (req, res) => {
     }
 });
 
+app.get('/users/:username', async (req, res) => {
+    const { username } = req.params;
 
-// Helper availability endpoints
+    try {
+        console.log('Fetching profile for username:', username);
+
+        const connection = await mysql.createConnection(dbConfig);
+
+        // Fetch user profile from the users table
+        console.log('Executing query to fetch user profile');
+        const [userResult] = await connection.execute("SELECT * FROM users WHERE username = ?", [username]);
+        console.log('User query result:', userResult);
+        if (userResult.length === 0) {
+            console.error('User not found for username:', username);
+            throw new Error('User not found');
+        }
+        const user = userResult[0];
+
+        // Fetch contact information from the contact_information table
+        console.log('Executing query to fetch contact information');
+        const [contactInfoResult] = await connection.execute("SELECT * FROM contact_information WHERE user_fk = ?", [user.user_id]);
+        console.log('Contact information query result:', contactInfoResult);
+        const contactInfo = contactInfoResult.length > 0 ? contactInfoResult[0] : {};
+
+        connection.end();
+        console.log('Database connection closed');
+
+        // Combine user and contact information
+        const profile = {
+            ...user,
+            firstname: contactInfo.firstname || '',
+            surname: contactInfo.surname || '',
+            address: contactInfo.address || '',
+            phone: contactInfo.phone || ''
+        };
+
+        console.log('Combined Profile:', profile);
+
+        res.status(200).json(profile);
+    } catch (error) {
+        console.error('Error fetching profile:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 // Get all availability
 app.get('/availability', async (req, res) => {
@@ -453,22 +505,6 @@ app.delete('/availability/:id', async (req, res) => {
     }
 });
 
-// Handle training applications
-app.post("/training/application", async (req, res) => {
-    const { name, email, trainingType } = req.body;
-
-    // Insert application data into the database
-    try {
-        const connection = await mysql.createConnection(dbConfig);
-        await connection.execute("INSERT INTO training_applications (name, email, training_type) VALUES (?, ?, ?)", [name, email, trainingType]);
-        connection.end();
-        res.status(201).json({ message: "Training application submitted successfully" });
-    } catch (error) {
-        console.error("Error submitting training application:", error);
-        res.status(500).json({ error: "Internal server error" });
-    }
-});
-
 // Submit helper registration request
 app.post('/helper/register', async (req, res) => {
     const { user_id } = req.body;
@@ -532,7 +568,7 @@ app.put('/helper/register/:id', async (req, res) => {
     }
 });
 
-// Get helper application status
+// Get helper application status ( this is for the helper registartion, not training)
 app.get('/helper/applicationStatus/:userId', async (req, res) => {
     const { userId } = req.params;
 
@@ -602,3 +638,94 @@ app.patch('/admin/applications/:userId', async (req, res) => {
     }
 });
 
+
+// Route to submit a training application
+app.post('/training/application', async (req, res) => {
+    const { userId, trainingType } = req.body;
+
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        
+        // Insert a new training application
+        await connection.execute('INSERT INTO training_applications (user_id, training_type, status) VALUES (?, ?, ?)', [userId, trainingType, 'Training']);
+        
+        // Update user's training status to 'training'
+        await connection.execute('UPDATE users SET training_status = ? WHERE user_id = ?', ['training', userId]);
+
+        connection.end();
+
+        res.status(201).json({ message: 'Training application submitted successfully' });
+    } catch (error) {
+        console.error('Error submitting training application:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Fetch all training applications with user information
+app.get('/admin/training-applications', async (req, res) => {
+    const sql = `
+        SELECT ta.application_id, u.user_id, u.username, u.email, u.img_path, ta.status, ta.training_type
+        FROM training_applications ta
+        JOIN users u ON ta.user_id = u.user_id
+    `;
+
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        const [results] = await connection.execute(sql);
+        connection.end();
+
+        res.status(200).json(results);
+    } catch (error) {
+        console.error('Error fetching training applications:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+
+// Update training application status by admin (approve or deny)
+app.patch('/admin/training-applications/:id', async (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+
+        // Update training application status
+        await connection.execute('UPDATE training_applications SET status = ? WHERE application_id = ?', [status, id]);
+
+        // If the application is approved, update user's training status to 'trained'
+        if (status === 'approved') {
+            // Get the user ID associated with the training application
+            const [application] = await connection.execute('SELECT user_id FROM training_applications WHERE application_id = ?', [id]);
+            const userId = application[0].user_id;
+
+            // Update user's training status
+            await connection.execute('UPDATE users SET training_status = ? WHERE user_id = ?', ['trained', userId]);
+        }
+
+        connection.end();
+
+        res.status(200).json({ message: 'Training application status updated successfully' });
+    } catch (error) {
+        console.error('Error updating training application status:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// getting all helper availabilities with user information
+app.get('/helper-availability', async (req, res) => {
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        const [results] = await connection.execute(`
+            SELECT h.helper_id, GROUP_CONCAT(' ', h.available_day) AS available_days, u.username
+            FROM helper_availability h
+            INNER JOIN users u ON h.helper_id = u.user_id
+            GROUP BY h.helper_id
+        `);
+        connection.end();
+        res.status(200).json(results);
+    } catch (error) {
+        console.error('Error fetching helper availability:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});

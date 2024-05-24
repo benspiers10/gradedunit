@@ -39,10 +39,16 @@ const Profile = () => {
         e.preventDefault();
         const formData = new FormData();
         formData.append('email', profile.email);
-        formData.append('newUsername', profile.username);
+        formData.append('username', profile.username);
+        
         if (file) {
             formData.append('profileImage', file);
         }
+
+        formData.append('firstname', profile.firstname);
+        formData.append('surname', profile.surname);
+        formData.append('address', profile.address);
+        formData.append('phone', profile.phone);
 
         try {
             const response = await axios.put(`http://localhost:8081/users/${username}`, formData, {
@@ -82,7 +88,7 @@ const Profile = () => {
                         value={profile.username} 
                         onChange={handleInputChange} 
                         placeholder="Username" 
-                        required 
+                        disabled
                     />
                     <input 
                         type="email" 
@@ -90,6 +96,38 @@ const Profile = () => {
                         value={profile.email} 
                         onChange={handleInputChange} 
                         placeholder="Email" 
+                        disabled
+                    />
+                    <input 
+                        type="text" 
+                        name="firstname" 
+                        value={profile.firstname || ''} 
+                        onChange={handleInputChange} 
+                        placeholder="First Name" 
+                        required 
+                    />
+                    <input 
+                        type="text" 
+                        name="surname" 
+                        value={profile.surname || ''} 
+                        onChange={handleInputChange} 
+                        placeholder="Surname" 
+                        required 
+                    />
+                    <input 
+                        type="text" 
+                        name="address" 
+                        value={profile.address || ''} 
+                        onChange={handleInputChange} 
+                        placeholder="Address" 
+                        required 
+                    />
+                    <input 
+                        type="number" 
+                        name="phone" 
+                        value={profile.phone || ''} 
+                        onChange={handleInputChange} 
+                        placeholder="Phone" 
                         required 
                     />
                     <input 
@@ -104,6 +142,9 @@ const Profile = () => {
                 <>
                     <p>Username: {profile.username}</p>
                     <p>Email: {profile.email}</p>
+                    <p>Full Name: {profile.firstname} {profile.surname}</p>
+                    <p>Address: {profile.address}</p> 
+                    <p>Phone: {profile.phone}</p> 
                     <p>Role: {profile.role === 3 ? 'Admin' : profile.role === 2 ? 'Helper' : profile.role === 1 ? 'Parent' : 'Scout'}</p>
                     <button className="profile-btn" onClick={() => setEditMode(true)}>Edit</button>
                 </>

@@ -27,9 +27,7 @@ const Home = () => {
         <h2 className="text-xl font-medium title-font text-white mt-5">Event 1</h2>
         <p className="text-base leading-relaxed mt-2">EVENTS</p>
         <Link to="/Events" className="text-indigo-400 inline-flex items-center mt-3">Events</Link>
-        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
-            <path d="M5 12h14M12 5l7 7-7 7"></path>
-          </svg>
+        
       </div>
       <div className="p-4 md:w-1/3 sm:mb-0 mb-6">
         <div className="rounded-lg h-64 overflow-hidden">
@@ -38,9 +36,7 @@ const Home = () => {
         <h2 className="text-xl font-medium title-font text-white mt-5">Event 2</h2>
         <p className="text-base leading-relaxed mt-2">EVENT </p>
         <Link to="/Events" className="text-indigo-400 inline-flex items-center mt-3">Events</Link>
-        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
-            <path d="M5 12h14M12 5l7 7-7 7"></path>
-          </svg>
+        
       </div>
       <div className="p-4 md:w-1/3 sm:mb-0 mb-6">
         <div className="rounded-lg h-64 overflow-hidden">
@@ -49,9 +45,7 @@ const Home = () => {
         <h2 className="text-xl font-medium title-font text-white mt-5">Event 3</h2>
         <p className="text-base leading-relaxed mt-2">EVENT</p>
         <Link to="/Events" className="text-indigo-400 inline-flex items-center mt-3">Events</Link>
-        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
-            <path d="M5 12h14M12 5l7 7-7 7"></path>
-          </svg>
+        
         
       </div>
     </div>

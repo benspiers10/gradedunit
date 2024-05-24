@@ -14,8 +14,8 @@ const Gallery = () => {
         setLoading(true);
         setError(null); // Reset the error state before making the request
         let response;
-        if (role === 2) {
-          response = await axios.get('http://localhost:8081/gallery/pending'); // Fetch pending images for role 2
+        if (role === 3) {
+          response = await axios.get('http://localhost:8081/gallery/pending'); // Fetch pending images for role 3
         } else {
           response = await axios.get('http://localhost:8081/gallery/approved'); // Fetch approved images for other roles
         }
@@ -69,7 +69,7 @@ const Gallery = () => {
               <img src={image.gal_img} alt={image.content} />
               <p>{image.title}</p>
               <p>{image.location}</p>
-              {role === 2 && image.pending === 1 && (
+              {role === 3 && image.pending === 1 && (
                 <div>
                   <p>Status: {image.pending === 1 ? 'Pending' : 'Approved'}</p>
                   <button className='px-3 py-3 rounded-sm bg-green-500' onClick={() => handleApproval(image.gallery_id, 0)}>Approve</button>
