@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 23, 2024 at 09:11 PM
+-- Generation Time: May 24, 2024 at 10:18 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -56,16 +56,24 @@ INSERT INTO `badges` (`badge_id`, `badge_name`, `badge_info`, `badge_img`) VALUE
 -- --------------------------------------------------------
 
 --
--- Table structure for table `contactinformation`
+-- Table structure for table `contact_information`
 --
 
-CREATE TABLE `contactinformation` (
+CREATE TABLE `contact_information` (
   `contact_id` int(11) NOT NULL,
   `user_fk` int(11) DEFAULT NULL,
+  `firstname` varchar(60) DEFAULT NULL,
+  `surname` varchar(60) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `contact_information`
+--
+
+INSERT INTO `contact_information` (`contact_id`, `user_fk`, `firstname`, `surname`, `address`, `phone`) VALUES
+(0, 1, 'Neb', 'Spook', '123 bullshitlane', '123455678');
 
 -- --------------------------------------------------------
 
@@ -167,18 +175,18 @@ INSERT INTO `helper_registration_requests` (`id`, `user_id`, `created_at`, `stat
 
 CREATE TABLE `training_applications` (
   `application_id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `training_type` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `user_id` int(11) DEFAULT NULL,
+  `training_type` varchar(50) DEFAULT NULL,
+  `status` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `training_applications`
 --
 
-INSERT INTO `training_applications` (`application_id`, `name`, `email`, `training_type`, `created_at`) VALUES
-(1, 'ben', 'ben@helper.com', 'Type A', '2024-05-23 17:42:34');
+INSERT INTO `training_applications` (`application_id`, `user_id`, `training_type`, `status`) VALUES
+(2, 2, 'Helper Training', 'approved'),
+(3, 2, 'Scouts Badge', 'Training');
 
 -- --------------------------------------------------------
 
@@ -192,23 +200,24 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `role` int(11) NOT NULL,
-  `img_path` varchar(255) DEFAULT NULL
+  `img_path` varchar(255) DEFAULT NULL,
+  `training_status` enum('not_applicable','training','trained') DEFAULT 'not_applicable'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `role`, `img_path`) VALUES
-(1, 'admin', 'admin@admin.com', '$2b$10$O9QS2GfcEyiop7G/EdoyBuzAmzzBqzwIciBqZJVGBoPjcR9huVxay', 3, 'images\\profileimg\\profileImage_1716479263040.jpg'),
-(2, 'ben', 'ben@helper.com', '$2b$10$thEMByfEhl6OtO2aUgIrw.dzf4iRrrdBn2uVlclfDbkOpqOrt0hwa', 2, 'images\\profileimg\\profileImage_1716479285546.png'),
-(3, 'robbie', 'robbie@helper.com', '$2b$10$GHxh.fqT6k9Mt5zcoqedYey17UDLucyuBWK54nLaDMT9WlBtGvRRy', 2, NULL),
-(4, 'craig', 'craig@helper.com', '$2b$10$3lUdNhP3bjt2SqfETLsUP.8VtgjYbELychT9MENpqhaErMyJd/u2i', 2, NULL),
-(5, 'hamish', 'hamish@scout.com', '$2b$10$qfp/wuQMVmjSzKH0CG/VPOkVx8qWrfyjaBYn3h0Z1nAUwhcFbdyk.', 2, NULL),
-(6, 'jonas', 'jonas@scout.com', '$2b$10$YCiGfWQHsW3YTHO/uXjF..Koq4lVMtOSHEA.l/icPG.h2XiCoI8sW', 1, NULL),
-(7, 'jeff', 'jeff@scout.com', '$2b$10$tVtqjMeUpgOFE6pGreiypu8MIxfSUgch.NI57/B3yLtDtJYR7VbnO', 0, NULL),
-(8, 'sam', 'sam@scout.com', '$2b$10$gEYXgCEsfOoz55HPqt4NsOAdfVJtHj1h4TbLax82NrytQ8rOS2muO', 0, NULL),
-(9, 'jammin', 'jamming123', '$2b$10$GiX5Exx1wQ7vHCPcMzZa5OjElq8Qlm568ee4ggqWKpc7qHYpTF0yS', 1, NULL);
+INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `role`, `img_path`, `training_status`) VALUES
+(1, 'admin', 'admin@admin.com', '$2b$10$O9QS2GfcEyiop7G/EdoyBuzAmzzBqzwIciBqZJVGBoPjcR9huVxay', 3, 'images\\profileimg\\profileImage_1716578890790.jpg', 'not_applicable'),
+(2, 'ben', 'ben@helper.com', '$2b$10$thEMByfEhl6OtO2aUgIrw.dzf4iRrrdBn2uVlclfDbkOpqOrt0hwa', 2, 'images\\profileimg\\profileImage_1716479285546.png', 'trained'),
+(3, 'robbie', 'robbie@helper.com', '$2b$10$GHxh.fqT6k9Mt5zcoqedYey17UDLucyuBWK54nLaDMT9WlBtGvRRy', 2, NULL, 'not_applicable'),
+(4, 'craig', 'craig@helper.com', '$2b$10$3lUdNhP3bjt2SqfETLsUP.8VtgjYbELychT9MENpqhaErMyJd/u2i', 2, NULL, 'not_applicable'),
+(5, 'hamish', 'hamish@scout.com', '$2b$10$qfp/wuQMVmjSzKH0CG/VPOkVx8qWrfyjaBYn3h0Z1nAUwhcFbdyk.', 2, NULL, 'not_applicable'),
+(6, 'jonas', 'jonas@scout.com', '$2b$10$YCiGfWQHsW3YTHO/uXjF..Koq4lVMtOSHEA.l/icPG.h2XiCoI8sW', 1, NULL, 'not_applicable'),
+(7, 'jeff', 'jeff@scout.com', '$2b$10$tVtqjMeUpgOFE6pGreiypu8MIxfSUgch.NI57/B3yLtDtJYR7VbnO', 0, NULL, 'not_applicable'),
+(8, 'sam', 'sam@scout.com', '$2b$10$gEYXgCEsfOoz55HPqt4NsOAdfVJtHj1h4TbLax82NrytQ8rOS2muO', 0, 'images\\profileimg\\profileImage_1716581811012.jpg', 'not_applicable'),
+(9, 'jammin', 'jamming123', '$2b$10$GiX5Exx1wQ7vHCPcMzZa5OjElq8Qlm568ee4ggqWKpc7qHYpTF0yS', 1, NULL, 'not_applicable');
 
 --
 -- Indexes for dumped tables
@@ -219,6 +228,13 @@ INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `role`, `img_pa
 --
 ALTER TABLE `badges`
   ADD PRIMARY KEY (`badge_id`);
+
+--
+-- Indexes for table `contact_information`
+--
+ALTER TABLE `contact_information`
+  ADD PRIMARY KEY (`contact_id`),
+  ADD KEY `user_fk` (`user_fk`);
 
 --
 -- Indexes for table `events`
@@ -251,7 +267,8 @@ ALTER TABLE `helper_registration_requests`
 -- Indexes for table `training_applications`
 --
 ALTER TABLE `training_applications`
-  ADD PRIMARY KEY (`application_id`);
+  ADD PRIMARY KEY (`application_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `users`
@@ -297,7 +314,7 @@ ALTER TABLE `helper_registration_requests`
 -- AUTO_INCREMENT for table `training_applications`
 --
 ALTER TABLE `training_applications`
-  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -310,6 +327,12 @@ ALTER TABLE `users`
 --
 
 --
+-- Constraints for table `contact_information`
+--
+ALTER TABLE `contact_information`
+  ADD CONSTRAINT `contact_information_ibfk_1` FOREIGN KEY (`user_fk`) REFERENCES `users` (`user_id`);
+
+--
 -- Constraints for table `helper_availability`
 --
 ALTER TABLE `helper_availability`
@@ -320,6 +343,12 @@ ALTER TABLE `helper_availability`
 --
 ALTER TABLE `helper_registration_requests`
   ADD CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+
+--
+-- Constraints for table `training_applications`
+--
+ALTER TABLE `training_applications`
+  ADD CONSTRAINT `training_applications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
