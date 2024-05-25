@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 24, 2024 at 10:18 PM
+-- Generation Time: May 25, 2024 at 05:05 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -73,7 +73,8 @@ CREATE TABLE `contact_information` (
 --
 
 INSERT INTO `contact_information` (`contact_id`, `user_fk`, `firstname`, `surname`, `address`, `phone`) VALUES
-(0, 1, 'Neb', 'Spook', '123 bullshitlane', '123455678');
+(1, 1, 'Neb', 'Spook', '123 bullshitlane', '123455678'),
+(2, 8, 'Sam', 'Mck', '123 Address', '1234786');
 
 -- --------------------------------------------------------
 
@@ -285,6 +286,12 @@ ALTER TABLE `users`
 --
 ALTER TABLE `badges`
   MODIFY `badge_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `contact_information`
+--
+ALTER TABLE `contact_information`
+  MODIFY `contact_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `events`
