@@ -384,6 +384,7 @@ app.put('/users/:username', upload.single('profileImage'), async (req, res) => {
     }
 });
 
+//full profile account, with contactinformation passed through for view
 app.get('/users/:username', async (req, res) => {
     const { username } = req.params;
 

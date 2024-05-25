@@ -25,7 +25,8 @@ import Training from './pages/helper/HelperTraining';
 import RegisterHelper from './pages/parent/RegisterHelper';
 import Applications from './pages/admin/Applications';
 import HelperAvailabilityList from './pages/admin/components/AvailabilityList';
-// import UserDetails from './pages/admin/components/UserDetails';
+import UserDetails from './pages/admin/components/UserDetails';
+import Games from './pages/shared/Games';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -70,6 +71,7 @@ const App = () => {
                     <Route path="/EventUpload" element={<EventUpload />} />
                     <Route path="/FileUpload" element={<FileUpload />} />
                     <Route path="/Profile" element={<Profile />} />
+                    <Route path="/Games" element={<Games />} />
                     {/* Events */}
                     <Route path="/Events" element={<Events />} />
                     <Route path="/Events/:id" element={<EventDetail />} />
@@ -79,7 +81,7 @@ const App = () => {
                     {/* Applications and Availability route for admin */}
                     <Route path="/Applications" element={<Applications />} />
                     <Route path="/AvailabilityList" element={<HelperAvailabilityList />} />
-                    {/* <Route path="/UserDetails/:id" element={<UserDetails />} /> */}
+                    <Route path="/UserDetails/:username" element={<UserDetails />} />
                     {/* Error route if page cannot be found */}
                     <Route path="*" element={<Error />} />
                 </Route>

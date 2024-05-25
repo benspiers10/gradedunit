@@ -76,8 +76,9 @@ const UserList = () => {
                                     <td className="px-4 py-2 border text-center">{user.role === 3 ? 'Admin' : user.role === 2 ? 'Helper' : user.role === 1 ? 'Parent' : 'Scout'}</td>
                                     <td className="px-4 py-2 border text-center">{trainingStatusLabels[user.training_status]}</td>
                                     <td className="px-4 py-2 border text-center">
-                                        <Link to={`/UserDetails/${user.id}`} className='bg-blue-500 text-white px-4 py-2 rounded'>More Information</Link>
-
+                                        <Link to={`/UserDetails/${user.username}`} className='bg-blue-500 text-white px-4 py-2 rounded'>
+                                            More Information
+                                        </Link>
                                     </td>
                                     <td className="px-4 py-2 border text-center">
                                         {user.role !== 3 && (
