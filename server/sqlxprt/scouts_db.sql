@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 25, 2024 at 05:05 PM
+-- Generation Time: May 27, 2024 at 11:14 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -56,6 +56,27 @@ INSERT INTO `badges` (`badge_id`, `badge_name`, `badge_info`, `badge_img`) VALUE
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `badge_progress`
+--
+
+CREATE TABLE `badge_progress` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `badge_id` int(11) NOT NULL,
+  `progress_percentage` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `badge_progress`
+--
+
+INSERT INTO `badge_progress` (`id`, `user_id`, `badge_id`, `progress_percentage`) VALUES
+(1, 7, 7, 73),
+(2, 8, 3, 60);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `contact_information`
 --
 
@@ -73,8 +94,9 @@ CREATE TABLE `contact_information` (
 --
 
 INSERT INTO `contact_information` (`contact_id`, `user_fk`, `firstname`, `surname`, `address`, `phone`) VALUES
-(1, 1, 'Neb', 'Spook', '123 bullshitlane', '123455678'),
-(2, 8, 'Sam', 'Mck', '123 Address', '1234786');
+(1, 1, 'Neb', 'Spook', '12 KerBland Base', '123455678'),
+(2, 8, 'Sam', 'Mck', '123 Address', '1234786'),
+(3, 2, 'Ben', 'Spiers', '123 Nowhere', '1231111123');
 
 -- --------------------------------------------------------
 
@@ -84,6 +106,7 @@ INSERT INTO `contact_information` (`contact_id`, `user_fk`, `firstname`, `surnam
 
 CREATE TABLE `events` (
   `event_id` int(11) NOT NULL,
+  `date` date DEFAULT NULL,
   `title` varchar(255) NOT NULL,
   `content` text DEFAULT NULL,
   `location` varchar(100) DEFAULT NULL,
@@ -94,9 +117,11 @@ CREATE TABLE `events` (
 -- Dumping data for table `events`
 --
 
-INSERT INTO `events` (`event_id`, `title`, `content`, `location`, `eve_img`) VALUES
-(1, 'Event 1', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin convallis, turpis sed viverra tempor, tellus elit gravida arcu, eget vestibulum est est ut ex. Duis id tincidunt sem. Aliquam ultrices leo ut est vestibulum rutrum. Nulla urna ipsum, dignissim ac pellentesque in, facilisis quis tortor. Ut at quam sagittis libero posuere cursus. Sed molestie tortor at risus vehicula, eget laoreet justo laoreet. Fusce turpis lacus, fermentum vitae neque id, lobortis aliquam dolor. Fusce tempor nec nulla sit amet sodales. Fusce eget lacinia neque.  Nulla nec enim ac justo pulvinar lacinia. Quisque consequat, lacus sed dignissim sagittis, eros elit imperdiet sem, eget vulputate ex lectus et urna. Aliquam posuere consectetur erat, at tristique arcu bibendum non. Morbi et rhoncus ex, a pellentesque lacus. Vivamus ullamcorper pulvinar sem, vel vestibulum nisi mollis ac. Integer laoreet massa nulla, sit amet cursus ipsum blandit sed. Nunc ullamcorper vulputate lectus non scelerisque. Nullam non turpis in dui hendrerit porta.', 'Karrigan Lodge, DE', 'images\\events\\image_1716475124867.jpg'),
-(2, 'Event 2', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin convallis, turpis sed viverra tempor, tellus elit gravida arcu, eget vestibulum est est ut ex. Duis id tincidunt sem. Aliquam ultrices leo ut est vestibulum rutrum. Nulla urna ipsum, dignissim ac pellentesque in, facilisis quis tortor. Ut at quam sagittis libero posuere cursus. Sed molestie tortor at risus vehicula, eget laoreet justo laoreet. Fusce turpis lacus, fermentum vitae neque id, lobortis aliquam dolor. Fusce tempor nec nulla sit amet sodales. Fusce eget lacinia neque.\r\n\r\nNulla nec enim ac justo pulvinar lacinia. Quisque consequat, lacus sed dignissim sagittis, eros elit imperdiet sem, eget vulputate ex lectus et urna. Aliquam posuere consectetur erat, at tristique arcu bibendum non. Morbi et rhoncus ex, a pellentesque lacus. Vivamus ullamcorper pulvinar sem, vel vestibulum nisi mollis ac. Integer laoreet massa nulla, sit amet cursus ipsum blandit sed. Nunc ullamcorper vulputate lectus non scelerisque. Nullam non turpis in dui hendrerit porta.', 'Dunskey Castle, SCO', 'images\\events\\eventImage_1716476157549.jpg');
+INSERT INTO `events` (`event_id`, `date`, `title`, `content`, `location`, `eve_img`) VALUES
+(6, '2024-06-01', 'Kayaking', 'Get ready for an exhilarating day of kayaking on the loch! At our upcoming event, Scouts will paddle through the serene waters of Loch Eilean, surrounded by stunning scenery, and guided by experienced instructors. From mastering paddling techniques to exploring hidden coves, it\'s an adventure not to be missed. Join us for a day filled with excitement, camaraderie, and memories to last a lifetime!', 'Loch Eilean', 'images\\events\\eventImage_1716824062459'),
+(7, '2024-06-15', 'Climbing', 'Get ready for an adrenaline-packed adventure at the Atlantis Leisure Centre! At our upcoming event, Scouts will tackle the thrilling challenge of bouldering on our state-of-the-art climbing walls. With expert guidance and safety equipment provided, participants will conquer new heights, build confidence, and make unforgettable memories. Join us for a day of excitement, teamwork, and boundless fun!', 'Atlantis Leisure Centre', 'images\\events\\eventImage_1716824108852'),
+(8, '2024-06-28', 'The Big Help Out - DIY Event', 'Get ready for a rewarding day of DIY projects at home or in the community! At our upcoming event, Scouts will roll up their sleeves and lend a helping hand, tackling a variety of tasks to make a positive impact. From painting and gardening to building and repairs, there\'s plenty of work to be done and skills to be learned. Join us for a day of teamwork, creativity, and making a difference together!', 'Community Centre', 'images\\events\\eventImage_1716824337601'),
+(9, '2024-07-05', 'Fun Days', 'Get ready for a fun-filled day(s) at Oban High School! At our upcoming event, Scouts will enjoy a variety of exciting activities, from sports tournaments and arts and crafts to interactive games and challenges and even some market stalls selling plants, food, and more! With something for everyone to enjoy, it\'s a weekend of laughter, friendship, and unforgettable memories. Join us for a day packed with excitement and adventure.', 'Oban High School', 'images\\events\\eventImage_1716824637921');
 
 -- --------------------------------------------------------
 
@@ -114,14 +139,6 @@ CREATE TABLE `gallery` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `pending` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `gallery`
---
-
-INSERT INTO `gallery` (`gallery_id`, `title`, `content`, `location`, `posted_by`, `gal_img`, `created_at`, `pending`) VALUES
-(6, 'te', 'te', 'te', NULL, 'images\\gallery\\image_1716225264554.png', '2024-05-20 17:14:24', 0),
-(7, 'Bacon De Kevin', 'THis is a hi', 'Lol meme', NULL, 'images\\gallery\\image_1716225424908.png', '2024-05-20 17:17:04', 0);
 
 -- --------------------------------------------------------
 
@@ -210,8 +227,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `role`, `img_path`, `training_status`) VALUES
-(1, 'admin', 'admin@admin.com', '$2b$10$O9QS2GfcEyiop7G/EdoyBuzAmzzBqzwIciBqZJVGBoPjcR9huVxay', 3, 'images\\profileimg\\profileImage_1716578890790.jpg', 'not_applicable'),
-(2, 'ben', 'ben@helper.com', '$2b$10$thEMByfEhl6OtO2aUgIrw.dzf4iRrrdBn2uVlclfDbkOpqOrt0hwa', 2, 'images\\profileimg\\profileImage_1716479285546.png', 'trained'),
+(1, 'admin', 'admin@admin.com', '$2b$10$O9QS2GfcEyiop7G/EdoyBuzAmzzBqzwIciBqZJVGBoPjcR9huVxay', 3, 'images\\profileimg\\profileImage_1716822825609', 'not_applicable'),
+(2, 'ben', 'ben@helper.com', '$2b$10$thEMByfEhl6OtO2aUgIrw.dzf4iRrrdBn2uVlclfDbkOpqOrt0hwa', 2, 'images\\profileimg\\profileImage_1716841453404', 'trained'),
 (3, 'robbie', 'robbie@helper.com', '$2b$10$GHxh.fqT6k9Mt5zcoqedYey17UDLucyuBWK54nLaDMT9WlBtGvRRy', 2, NULL, 'not_applicable'),
 (4, 'craig', 'craig@helper.com', '$2b$10$3lUdNhP3bjt2SqfETLsUP.8VtgjYbELychT9MENpqhaErMyJd/u2i', 2, NULL, 'not_applicable'),
 (5, 'hamish', 'hamish@scout.com', '$2b$10$qfp/wuQMVmjSzKH0CG/VPOkVx8qWrfyjaBYn3h0Z1nAUwhcFbdyk.', 2, NULL, 'not_applicable'),
@@ -229,6 +246,14 @@ INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `role`, `img_pa
 --
 ALTER TABLE `badges`
   ADD PRIMARY KEY (`badge_id`);
+
+--
+-- Indexes for table `badge_progress`
+--
+ALTER TABLE `badge_progress`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `badge_id` (`badge_id`);
 
 --
 -- Indexes for table `contact_information`
@@ -288,16 +313,22 @@ ALTER TABLE `badges`
   MODIFY `badge_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
+-- AUTO_INCREMENT for table `badge_progress`
+--
+ALTER TABLE `badge_progress`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `contact_information`
 --
 ALTER TABLE `contact_information`
-  MODIFY `contact_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `contact_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `gallery`
@@ -332,6 +363,13 @@ ALTER TABLE `users`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `badge_progress`
+--
+ALTER TABLE `badge_progress`
+  ADD CONSTRAINT `badge_progress_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  ADD CONSTRAINT `badge_progress_ibfk_2` FOREIGN KEY (`badge_id`) REFERENCES `badges` (`badge_id`);
 
 --
 -- Constraints for table `contact_information`
