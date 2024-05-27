@@ -27,6 +27,7 @@ import Applications from './pages/admin/Applications';
 import HelperAvailabilityList from './pages/admin/components/AvailabilityList';
 import UserDetails from './pages/admin/components/UserDetails';
 import Games from './pages/shared/Games';
+import BadgeProgress from './pages/users/BadgeProgress';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -72,6 +73,7 @@ const App = () => {
                     <Route path="/FileUpload" element={<FileUpload />} />
                     <Route path="/Profile" element={<Profile />} />
                     <Route path="/Games" element={<Games />} />
+                    <Route path="/BadgeProgress" element={<BadgeProgress />} />
                     {/* Events */}
                     <Route path="/Events" element={<Events />} />
                     <Route path="/Events/:id" element={<EventDetail />} />

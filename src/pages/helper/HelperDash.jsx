@@ -15,6 +15,7 @@ const Dash = () => {
                 <Link to="/FileUpload" className="dashboard-button">File Upload</Link>
                 <Link to="/Availability" className="dashboard-button">Availability</Link>
                 <Link to="/Training" className="dashboard-button">Training</Link>
+                <Link to="/Events" className="dashboard-button">Upcoming Events</Link>
             </div>
         </div>
         </div>

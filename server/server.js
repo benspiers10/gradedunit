@@ -730,3 +730,25 @@ app.get('/helper-availability', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+app.get('/users/:userId/badge-progress', async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+
+        const [badges] = await connection.execute(`
+            SELECT b.badge_id, b.badge_name, b.badge_info, b.badge_img,  bp.progress_percentage
+            FROM badge_progress bp
+            JOIN badges b ON bp.badge_id = b.badge_id
+            WHERE bp.user_id = ?
+        `, [userId]);
+
+        connection.end();
+
+        res.status(200).json(badges);
+    } catch (error) {
+        console.error('Error fetching badges:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});

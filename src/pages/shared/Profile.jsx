@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Resizer from 'react-image-file-resizer'; // Import the image resizer library
 import './css/profile.css';
 
 const Profile = () => {
@@ -32,7 +33,26 @@ const Profile = () => {
     };
 
     const handleFileChange = (e) => {
-        setFile(e.target.files[0]);
+        const selectedFile = e.target.files[0];
+        // Check file size (in bytes)
+        const maxSize = 5 * 1024 * 1024; // 5MB (adjust as needed)
+        if (selectedFile.size > maxSize) {
+            alert('File size exceeds the limit of 5MB.');
+            return;
+        }
+        // Resize the image before setting the file state
+        Resizer.imageFileResizer(
+            selectedFile,
+            300, // New width (adjust as needed)
+            300, // New height (adjust as needed)
+            'JPEG', // Format
+            100, // Quality (adjust as needed)
+            0, // Rotation (0 for no rotation)
+            (resizedFile) => {
+                setFile(resizedFile);
+            },
+            'blob' // Output type
+        );
     };
 
     const handleFormSubmit = async (e) => {
@@ -104,7 +124,7 @@ const Profile = () => {
                         value={profile.firstname || ''} 
                         onChange={handleInputChange} 
                         placeholder="First Name" 
-                        required 
+                        
                     />
                     <input 
                         type="text" 
@@ -112,7 +132,7 @@ const Profile = () => {
                         value={profile.surname || ''} 
                         onChange={handleInputChange} 
                         placeholder="Surname" 
-                        required 
+                        
                     />
                     <input 
                         type="text" 
@@ -120,7 +140,7 @@ const Profile = () => {
                         value={profile.address || ''} 
                         onChange={handleInputChange} 
                         placeholder="Address" 
-                        required 
+                         
                     />
                     <input 
                         type="number" 
@@ -128,7 +148,7 @@ const Profile = () => {
                         value={profile.phone || ''} 
                         onChange={handleInputChange} 
                         placeholder="Phone" 
-                        required 
+                         
                     />
                     <input 
                         type="file" 
