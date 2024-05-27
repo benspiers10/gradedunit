@@ -37,21 +37,31 @@ function TrainingApplication() {
     };
 
     return (
-        <div className="flex items-center justify-center h-screen">
-            <div className="w-400 bg-gray-100 p-8 rounded shadow-lg">
+        <div className="flex items-center justify-center min-h-screen">
+            <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
                 <h2 className="text-2xl font-bold mb-4 text-center">Apply for Training</h2>
                 {error && <p className="text-red-500 mb-2">{error}</p>}
                 {success && <p className="text-green-500 mb-2">{success}</p>}
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
                         <label htmlFor="trainingType" className="block text-gray-700">Training Type:</label>
-                        <select id="trainingType" value={trainingType} onChange={handleChange} className="form-select mt-1 block w-full">
+                        <select
+                            id="trainingType"
+                            value={trainingType}
+                            onChange={handleChange}
+                            className="form-select mt-1 block w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                        >
                             <option value="">Select Training Type</option>
                             <option value="Helper Training">Helper Training</option>
                             <option value="Scouts Badge">Scouts Badge</option>
                         </select>
                     </div>
-                    <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">Submit Application</button>
+                    <button
+                        type="submit"
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full transition duration-300 ease-in-out"
+                    >
+                        Submit Application
+                    </button>
                 </form>
             </div>
         </div>

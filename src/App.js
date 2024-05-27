@@ -53,11 +53,11 @@ const App = () => {
         // creating routes
         <BrowserRouter>
             <Routes>
+                    <Route path="/Register" element={<Register />} />
+                    <Route path="/Login" element={<Login />} />
                 <Route path="/" element={<RootLayout />}>
                     {/* Main Pages */}
                     <Route index element={<Home />} />
-                    <Route path="/Register" element={<Register />} />
-                    <Route path="/Login" element={<Login />} />
                     {/* Dashboards */}
                     <Route path="/Dash" element={<Dash />} />
                     <Route path="/ParentDash" element={<ParentDash />} />

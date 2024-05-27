@@ -241,11 +241,11 @@ app.get('/badges', async (req, res) => {
 
 // Submit event to events page  
 app.post('/events', upload.single('eventImage'), async (req, res) => {
-    const { title, content, location } = req.body;
+    const { title, content, location, date } = req.body; // Include date in the destructured body
     const filePath = path.join('images/events', req.file.filename);
 
-    const sql = 'INSERT INTO events (title, content, location, eve_img) VALUES (?, ?, ?, ?)';
-    const values = [title, content, location, filePath];
+    const sql = 'INSERT INTO events (title, content, location, eve_img, date) VALUES (?, ?, ?, ?, ?)'; // Include date in the SQL statement
+    const values = [title, content, location, filePath, date]; // Include date in the values array
 
     try {
         const connection = await mysql.createConnection(dbConfig);
@@ -274,6 +274,7 @@ app.get('/events', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
 
 app.get('/events/:id', async (req, res) => {
     const { id } = req.params;

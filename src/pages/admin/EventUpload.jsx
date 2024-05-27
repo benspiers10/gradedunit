@@ -1,97 +1,141 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Resizer from "react-image-file-resizer";
 
 function EventUpload() {
-    const [file, setFile] = useState(null);
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
-    const [location, setLocation] = useState('');
+    const [formData, setFormData] = useState({
+        file: null,
+        title: "",
+        content: "",
+        location: "",
+    });
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
 
-    const handleFile = (e) => {
-        setFile(e.target.files[0]);
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
     };
 
-    const handleUpload = async () => {
-        if (!file || !title || !content || !location) {
-            setError('All fields are required.');
+    const handleFile = (e) => {
+        const selectedFile = e.target.files[0];
+        const maxSize = 5 * 1024 * 1024; // 5MB
+
+        if (selectedFile.size > maxSize) {
+            setError("File size exceeds the limit of 5MB.");
             return;
         }
 
-        const formData = new FormData();
-        formData.append('eventImage', file);  // Changed to 'eventImage' to match backend field name
-        formData.append('title', title);
-        formData.append('content', content);
-        formData.append('location', location);
+        Resizer.imageFileResizer(
+            selectedFile,
+            300,
+            300,
+            "JPEG",
+            100,
+            0,
+            (resizedFile) => {
+                setFormData({
+                    ...formData,
+                    file: resizedFile,
+                });
+                setError(null);
+            },
+            "blob"
+        );
+    };
 
-        try {
-            const res = await axios.post('http://localhost:8081/events', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-            console.log(res.data);
-            setSuccess('Event uploaded successfully!');
-            handleCancel(); // Reset the form after successful upload
-        } catch (err) {
-            console.error(err);
-            setError('Failed to upload event. Please try again later.');
+    const handleSubmit = () => {
+        const { file, title, content, location } = formData;
+
+        if (!file || !title || !content || !location) {
+            setError("All fields are required.");
+            return;
         }
+
+        const formDataToSend = new FormData();
+        formDataToSend.append("image", file);
+        formDataToSend.append("title", title);
+        formDataToSend.append("content", content);
+        formDataToSend.append("location", location);
+
+        axios
+            .post("http://localhost:8081/gallery", formDataToSend)
+            .then((res) => {
+                console.log(res);
+                setSuccess("Event uploaded successfully!");
+                handleCancel();
+            })
+            .catch((err) => {
+                console.error(err);
+                setError("Failed to upload event. Please try again later.");
+            });
     };
 
     const handleCancel = () => {
-        setFile(null);
-        setTitle('');
-        setContent('');
-        setLocation('');
+        setFormData({
+            file: null,
+            title: "",
+            content: "",
+            location: "",
+        });
         setError(null);
         setSuccess(null);
     };
 
     return (
-        <div className="flex flex-col items-center">
-            {error && <p className="text-red-500">{error}</p>}
-            {success && <p className="text-green-500">{success}</p>}
-            <input 
-                type="text" 
-                placeholder="Title" 
-                value={title} 
-                onChange={(e) => setTitle(e.target.value)} 
-                className="m-2 p-2 border border-gray-300 rounded"
-            />
-            <textarea 
-                placeholder="Content" 
-                value={content} 
-                onChange={(e) => setContent(e.target.value)} 
-                className="m-2 p-2 border border-gray-300 rounded"
-            />
-            <input 
-                type="text" 
-                placeholder="Location" 
-                value={location} 
-                onChange={(e) => setLocation(e.target.value)} 
-                className="m-2 p-2 border border-gray-300 rounded"
-            />
-            <input 
-                type="file" 
-                name="eventImage" 
-                onChange={handleFile} 
-                className="m-2 p-2 border border-gray-300 rounded"
-            />
-            <div className="flex">
-                <button 
-                    className="m-2 px-3 py-2 rounded bg-cyan-400 text-white" 
-                    onClick={handleUpload}
-                >
-                    Upload
-                </button>
-                <button 
-                    className="m-2 px-3 py-2 rounded bg-cyan-400 text-white" 
-                    onClick={handleCancel}
-                >
-                    Cancel
-                </button>
+        <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-12">
+            <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
+                <h2 className="text-2xl font-bold mb-6 text-center">
+                    Upload Event
+                </h2>
+                {error && <p className="text-red-500 mb-4">{error}</p>}
+                {success && <p className="text-green-500 mb-4">{success}</p>}
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="Title"
+                    value={formData.title}
+                    onChange={handleChange}
+                    className="w-full mb-4 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <input
+                    type="text"
+                    name="content"
+                    placeholder="Content"
+                    value={formData.content}
+                    onChange={handleChange}
+                    className="w-full mb-4 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <input
+                    type="text"
+                    name="location"
+                    placeholder="Location"
+                    value={formData.location}
+                    onChange={handleChange}
+                    className="w-full mb-4 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <input
+                    type="file"
+                    name="file"
+                    onChange={handleFile}
+                    className="w-full mb-4 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <div className="flex space-x-4">
+                    <button
+                        className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg"
+                        onClick={handleSubmit}
+                    >
+                        Upload
+                    </button>
+                    <button
+                        className="w-full bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg"
+                        onClick={handleCancel}
+                    >
+                        Cancel
+                    </button>
+                </div>
             </div>
         </div>
     );

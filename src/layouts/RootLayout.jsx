@@ -1,10 +1,10 @@
-import Nav from "../pages/components/Nav";
+import Header from "../pages/components/Header";
 import { Outlet } from "react-router-dom";
 
 export default function RootLayout() {
     return(
         <div>
-            <Nav />
+            <Header />
             <Outlet />
         </div>
     )

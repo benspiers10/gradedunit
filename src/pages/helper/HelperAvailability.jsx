@@ -52,35 +52,35 @@ function Availability() {
     };
 
     return (
-        <div className="flex flex-col items-center">
-            {error && <p className="text-red-500">{error}</p>}
-            {success && <p className="text-green-500">{success}</p>}
-            <h2 className="mt-4 mb-2 text-lg font-semibold">Select Your Available Days</h2>
-            <div className="flex flex-wrap mb-4">
+        <div className="min-h-screen bg-gray-100 flex flex-col items-center py-12">
+            {error && <p className="text-red-500 mb-4">{error}</p>}
+            {success && <p className="text-green-500 mb-4">{success}</p>}
+            <h2 className="text-2xl font-bold mb-6">Select Your Available Days</h2>
+            <div className="flex flex-wrap justify-center mb-6">
                 {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(day => (
                     <div key={day} className="m-2">
-                        <label>
+                        <label className="flex items-center">
                             <input
                                 type="checkbox"
                                 value={day}
                                 checked={selectedDays.includes(day)}
                                 onChange={handleDaySelection}
+                                className="form-checkbox text-blue-500"
                             />
-                            <span className="ml-2">{day}</span>
+                            <span className="ml-2 text-lg">{day}</span>
                         </label>
                     </div>
                 ))}
             </div>
-            <button className="px-4 py-2 rounded bg-cyan-400 text-white mb-4" onClick={handleSubmit}>
+            <button className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600" onClick={handleSubmit}>
                 Submit Availability
             </button>
-            <h2 className="mb-2 text-lg font-semibold">Other Helpers' Availability</h2>
-            <div className="flex flex-col items-start">
+            <h2 className="text-2xl font-bold mt-8 mb-4">Other Helpers' Availability</h2>
+            <div className="w-full max-w-3xl bg-white p-6 rounded-lg shadow-md">
                 {otherHelpers.map(helper => (
-                    <div key={helper.helper_id} className="mb-2">
-                        <p className="mb-1">
-                            <span className="font-semibold">{helper.username}:</span> {Array.isArray(helper.available_days) ? helper.available_days.join(', ') : helper.available_days}
-                        </p>
+                    <div key={helper.helper_id} className="mb-4">
+                        <p className="text-lg font-semibold">{helper.username}:</p>
+                        <p>{Array.isArray(helper.available_days) ? helper.available_days.join(', ') : helper.available_days}</p>
                     </div>
                 ))}
             </div>

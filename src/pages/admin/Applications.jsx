@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react";
-import HelperApplications from "./HelperApplications";
-import TrainingApplications from "./TrainingApplications";
+import HelperApplications from "./components/HelperApplications";
+import TrainingApplications from "./components/TrainingApplications";
 
 const Applications = () => {
     return(
