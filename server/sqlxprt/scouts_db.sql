@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 27, 2024 at 11:14 PM
+-- Generation Time: May 29, 2024 at 12:13 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -96,7 +96,13 @@ CREATE TABLE `contact_information` (
 INSERT INTO `contact_information` (`contact_id`, `user_fk`, `firstname`, `surname`, `address`, `phone`) VALUES
 (1, 1, 'Neb', 'Spook', '12 KerBland Base', '123455678'),
 (2, 8, 'Sam', 'Mck', '123 Address', '1234786'),
-(3, 2, 'Ben', 'Spiers', '123 Nowhere', '1231111123');
+(3, 2, 'Ben', 'Spiers', '123 Nowhere', '1231111123'),
+(4, 6, 'Jonas', 'Joose', '123 Random', '123567433'),
+(5, 3, 'Robbie', 'Ticks', '123 Random Street', '1234678'),
+(6, 4, 'Craig', 'Bain', '123 Inverness', '12673243432'),
+(7, 5, 'Hamish', 'Bain', '123 Glasgow', '1246782'),
+(8, 7, 'Jeff', 'Spinks', '123 Spoinks Avenue', '12415123'),
+(9, 9, 'Louise', 'Stevenson', '123 Avenue', '12515123');
 
 -- --------------------------------------------------------
 
@@ -121,7 +127,8 @@ INSERT INTO `events` (`event_id`, `date`, `title`, `content`, `location`, `eve_i
 (6, '2024-06-01', 'Kayaking', 'Get ready for an exhilarating day of kayaking on the loch! At our upcoming event, Scouts will paddle through the serene waters of Loch Eilean, surrounded by stunning scenery, and guided by experienced instructors. From mastering paddling techniques to exploring hidden coves, it\'s an adventure not to be missed. Join us for a day filled with excitement, camaraderie, and memories to last a lifetime!', 'Loch Eilean', 'images\\events\\eventImage_1716824062459'),
 (7, '2024-06-15', 'Climbing', 'Get ready for an adrenaline-packed adventure at the Atlantis Leisure Centre! At our upcoming event, Scouts will tackle the thrilling challenge of bouldering on our state-of-the-art climbing walls. With expert guidance and safety equipment provided, participants will conquer new heights, build confidence, and make unforgettable memories. Join us for a day of excitement, teamwork, and boundless fun!', 'Atlantis Leisure Centre', 'images\\events\\eventImage_1716824108852'),
 (8, '2024-06-28', 'The Big Help Out - DIY Event', 'Get ready for a rewarding day of DIY projects at home or in the community! At our upcoming event, Scouts will roll up their sleeves and lend a helping hand, tackling a variety of tasks to make a positive impact. From painting and gardening to building and repairs, there\'s plenty of work to be done and skills to be learned. Join us for a day of teamwork, creativity, and making a difference together!', 'Community Centre', 'images\\events\\eventImage_1716824337601'),
-(9, '2024-07-05', 'Fun Days', 'Get ready for a fun-filled day(s) at Oban High School! At our upcoming event, Scouts will enjoy a variety of exciting activities, from sports tournaments and arts and crafts to interactive games and challenges and even some market stalls selling plants, food, and more! With something for everyone to enjoy, it\'s a weekend of laughter, friendship, and unforgettable memories. Join us for a day packed with excitement and adventure.', 'Oban High School', 'images\\events\\eventImage_1716824637921');
+(9, '2024-07-05', 'Fun Days', 'Get ready for a fun-filled day(s) at Oban High School! At our upcoming event, Scouts will enjoy a variety of exciting activities, from sports tournaments and arts and crafts to interactive games and challenges and even some market stalls selling plants, food, and more! With something for everyone to enjoy, it\'s a weekend of laughter, friendship, and unforgettable memories. Join us for a day packed with excitement and adventure.', 'Oban High School', 'images\\events\\eventImage_1716824637921'),
+(10, '2024-07-14', 'News Event', 'Get ready for an informative and engaging community news event! At our upcoming gathering, Scouts and community members alike will come together to mingle and catch up on all the latest news and updates. From hearing about upcoming community projects to learning about the exciting activities Scouts are involved in, it\'s a chance to connect, share ideas, and strengthen community bonds. Join us for an evening of camaraderie, networking, and staying informed about all things Oban!', 'Community Centre', 'images\\events\\eventImage_1716907045033');
 
 -- --------------------------------------------------------
 
@@ -139,6 +146,15 @@ CREATE TABLE `gallery` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `pending` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `gallery`
+--
+
+INSERT INTO `gallery` (`gallery_id`, `title`, `content`, `location`, `posted_by`, `gal_img`, `created_at`, `pending`) VALUES
+(14, 'Test', 'test', 'test', 'ben', 'images\\gallery\\image_1716927916362', '2024-05-28 20:25:16', 0),
+(15, 'test', 'test', 'test', 'ben', 'images\\gallery\\image_1716927926087', '2024-05-28 20:25:26', 0),
+(16, 'test', 'test', 'test', 'ben', 'images\\gallery\\image_1716927931741', '2024-05-28 20:25:31', 0);
 
 -- --------------------------------------------------------
 
@@ -229,13 +245,13 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `role`, `img_path`, `training_status`) VALUES
 (1, 'admin', 'admin@admin.com', '$2b$10$O9QS2GfcEyiop7G/EdoyBuzAmzzBqzwIciBqZJVGBoPjcR9huVxay', 3, 'images\\profileimg\\profileImage_1716822825609', 'not_applicable'),
 (2, 'ben', 'ben@helper.com', '$2b$10$thEMByfEhl6OtO2aUgIrw.dzf4iRrrdBn2uVlclfDbkOpqOrt0hwa', 2, 'images\\profileimg\\profileImage_1716841453404', 'trained'),
-(3, 'robbie', 'robbie@helper.com', '$2b$10$GHxh.fqT6k9Mt5zcoqedYey17UDLucyuBWK54nLaDMT9WlBtGvRRy', 2, NULL, 'not_applicable'),
-(4, 'craig', 'craig@helper.com', '$2b$10$3lUdNhP3bjt2SqfETLsUP.8VtgjYbELychT9MENpqhaErMyJd/u2i', 2, NULL, 'not_applicable'),
-(5, 'hamish', 'hamish@scout.com', '$2b$10$qfp/wuQMVmjSzKH0CG/VPOkVx8qWrfyjaBYn3h0Z1nAUwhcFbdyk.', 2, NULL, 'not_applicable'),
-(6, 'jonas', 'jonas@scout.com', '$2b$10$YCiGfWQHsW3YTHO/uXjF..Koq4lVMtOSHEA.l/icPG.h2XiCoI8sW', 1, NULL, 'not_applicable'),
-(7, 'jeff', 'jeff@scout.com', '$2b$10$tVtqjMeUpgOFE6pGreiypu8MIxfSUgch.NI57/B3yLtDtJYR7VbnO', 0, NULL, 'not_applicable'),
+(3, 'robbie', 'robbie@helper.com', '$2b$10$GHxh.fqT6k9Mt5zcoqedYey17UDLucyuBWK54nLaDMT9WlBtGvRRy', 2, 'images\\profileimg\\profileImage_1716932028744', 'not_applicable'),
+(4, 'craig', 'craig@helper.com', '$2b$10$3lUdNhP3bjt2SqfETLsUP.8VtgjYbELychT9MENpqhaErMyJd/u2i', 2, 'images\\profileimg\\profileImage_1716932061511', 'not_applicable'),
+(5, 'hamish', 'hamish@scout.com', '$2b$10$qfp/wuQMVmjSzKH0CG/VPOkVx8qWrfyjaBYn3h0Z1nAUwhcFbdyk.', 2, 'images\\profileimg\\profileImage_1716932195052', 'not_applicable'),
+(6, 'jonas', 'jonas@scout.com', '$2b$10$YCiGfWQHsW3YTHO/uXjF..Koq4lVMtOSHEA.l/icPG.h2XiCoI8sW', 1, 'images\\profileimg\\profileImage_1716931898070', 'not_applicable'),
+(7, 'jeff', 'jeff@scout.com', '$2b$10$tVtqjMeUpgOFE6pGreiypu8MIxfSUgch.NI57/B3yLtDtJYR7VbnO', 0, 'images\\profileimg\\profileImage_1716933584287', 'not_applicable'),
 (8, 'sam', 'sam@scout.com', '$2b$10$gEYXgCEsfOoz55HPqt4NsOAdfVJtHj1h4TbLax82NrytQ8rOS2muO', 0, 'images\\profileimg\\profileImage_1716581811012.jpg', 'not_applicable'),
-(9, 'jammin', 'jamming123', '$2b$10$GiX5Exx1wQ7vHCPcMzZa5OjElq8Qlm568ee4ggqWKpc7qHYpTF0yS', 1, NULL, 'not_applicable');
+(9, 'louise', 'loise@parent.net', '$2b$10$GiX5Exx1wQ7vHCPcMzZa5OjElq8Qlm568ee4ggqWKpc7qHYpTF0yS', 1, 'images\\profileimg\\profileImage_1716934050717', 'not_applicable');
 
 --
 -- Indexes for dumped tables
@@ -322,19 +338,19 @@ ALTER TABLE `badge_progress`
 -- AUTO_INCREMENT for table `contact_information`
 --
 ALTER TABLE `contact_information`
-  MODIFY `contact_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `contact_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `gallery`
 --
 ALTER TABLE `gallery`
-  MODIFY `gallery_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `gallery_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `helper_availability`
