@@ -40,8 +40,8 @@ const Profile = () => {
         }
         Resizer.imageFileResizer(
             selectedFile,
-            300, // New width (adjust as needed)
-            300, // New height (adjust as needed)
+            400, // New width (adjust as needed)
+            400, // New height (adjust as needed)
             'JPEG', // Format
             100, // Quality (adjust as needed)
             0, // Rotation (0 for no rotation)

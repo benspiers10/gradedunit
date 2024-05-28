@@ -37,11 +37,10 @@ function TrainingApplication() {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen">
-            <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
+        <div className="min-h-screen bg-gray-100 py-10">
+            <div className="max-w-lg w-full bg-white p-8 rounded-lg shadow-lg">
                 <h2 className="text-2xl font-bold mb-4 text-center">Apply for Training</h2>
-                {error && <p className="text-red-500 mb-2">{error}</p>}
-                {success && <p className="text-green-500 mb-2">{success}</p>}
+                
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
                         <label htmlFor="trainingType" className="block text-gray-700">Training Type:</label>
@@ -62,6 +61,9 @@ function TrainingApplication() {
                     >
                         Submit Application
                     </button>
+
+                    {error && <p className="text-red-500 mb-2">{error}</p>}
+                    {success && <p className="text-green-500 mb-2">{success}</p>}
                 </form>
             </div>
         </div>

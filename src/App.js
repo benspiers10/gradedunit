@@ -15,7 +15,7 @@ import Badges from './pages/shared/Badges';
 import Error from './pages/shared/Error';
 import RootLayout from './layouts/RootLayout';
 import UserList from './pages/admin/UserList';
-import EventUpload from './pages/admin/EventUpload';
+import EventUpload from './pages/admin/components/EventUpload';
 import FileUpload from './pages/components/FileUpload';
 import Profile from './pages/shared/Profile';
 import Events from './pages/shared/Events';

@@ -1,4 +1,3 @@
-import axios from "axios";
 import React from "react";
 import HelperApplications from "./components/HelperApplications";
 import TrainingApplications from "./components/TrainingApplications";

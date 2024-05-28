@@ -73,7 +73,7 @@ const Header = () => {
   );
 
   return (
-    <nav className="w-full text-black p-4 mb-10 shadow-sm bg-gray-200">
+    <nav className="w-full text-black p-4 shadow-sm bg-gray-200">
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-center justify-between">
         <Link to='/'>
           <img className="h-20" src={Logo} alt="Scouts Logo" />

@@ -52,9 +52,9 @@ const BadgeProgress = () => {
     }
 
     return (
-        <div className="container mx-auto px-4 py-8">
-            <h2 className="text-2xl font-semibold mb-6">Badge Progress</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className=" py-10">
+            
+            <div className="">
                 {badges.length > 0 ? (
                     badges.map((badge) => (
                         <div key={badge.badge_id} className="bg-white shadow-md rounded-lg p-6">

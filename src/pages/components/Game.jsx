@@ -1,20 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-const Game = ({ image, url, name, description }) => (
-  <div className="col-span-12 sm:col-span-6 md:col-span-4 p-3">
-    <Link to={url} target='_blank' className="block">
-      <div className="w-full rounded-lg overflow-hidden shadow-md bg-white">
-        <div className="relative">
-          <img src={image} alt="game" className="w-full h-auto" />
+const Game = ({ image, url, name, description }) => {
+    return (
+        <div className="bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300 ease-in-out">
+            <a href={url} target="_blank" rel="noopener noreferrer">
+                <img src={image} alt={name} className="w-full h-32 object-cover" />
+                <div className="p-4">
+                    <h3 className="text-xl font-bold text-blue-600">{name}</h3>
+                    <p className="text-gray-700 mt-2">{description}</p>
+                </div>
+            </a>
         </div>
-        <div className="p-4">
-          <p className="text-gray-800 text-lg font-semibold mb-2">{name}</p>
-          <p className="text-gray-600 text-sm">{description}</p>
-        </div>
-      </div>
-    </Link>
-  </div>
-);
+    );
+};
 
 export default Game;

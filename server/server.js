@@ -125,12 +125,12 @@ app.post('/signin', async (req, res) => {
 
 // Submit image to gallery
 app.post('/gallery', upload.single('image'), async (req, res) => {
-    const { title, content, location } = req.body;
+    const { title, content, location, posted_by } = req.body;
     const filePath = path.join('images/gallery', req.file.filename);
     const approvalStatus = 1; // Set initial approval status to pending
 
-    const sql = 'INSERT INTO gallery (title, content, location, gal_img, pending) VALUES (?, ?, ?, ?, ?)';
-    const values = [title, content, location, filePath, approvalStatus];
+    const sql = 'INSERT INTO gallery (title, content, location, posted_by, gal_img, pending) VALUES (?, ?, ?, ?, ?, ?)';
+    const values = [title, content, location, posted_by, filePath, approvalStatus];
 
     try {
         const connection = await mysql.createConnection(dbConfig);

@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import axios from "axios";
 import Resizer from "react-image-file-resizer"; // Import the image resizer library
 
-function FileUpload({ userName }) {
+function FileUpload () {
     const [file, setFile] = useState(null);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [location, setLocation] = useState('');
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
+    const username = localStorage.getItem("username")
 
     // Handle file selection and resize if necessary
     const handleFile = (e) => {
@@ -23,8 +24,8 @@ function FileUpload({ userName }) {
         // Resize the image before setting the file state
         Resizer.imageFileResizer(
             selectedFile,
-            300, // New width (adjust as needed)
-            300, // New height (adjust as needed)
+            800, // New width (adjust as needed)
+            800, // New height (adjust as needed)
             'JPEG', // Format
             100, // Quality (adjust as needed)
             0, // Rotation (0 for no rotation)
@@ -42,14 +43,14 @@ function FileUpload({ userName }) {
             setError('All fields are required.');
             return;
         }
-
+    
         const formData = new FormData();
         formData.append('image', file);
         formData.append('title', title);
         formData.append('content', content);
         formData.append('location', location);
-        formData.append('posted_by', userName);
-
+        formData.append('posted_by', username); // Include the user's name
+    
         axios.post('http://localhost:8081/gallery', formData)
             .then(res => {
                 console.log(res);
@@ -62,6 +63,7 @@ function FileUpload({ userName }) {
             });
     };
 
+
     // Reset form fields
     const handleCancel = () => {
         setFile(null);
@@ -73,11 +75,9 @@ function FileUpload({ userName }) {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-12">
-            <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-2xl font-bold mb-6 text-center">Upload Image</h2>
-                {error && <p className="text-red-500 mb-4">{error}</p>}
-                {success && <p className="text-green-500 mb-4">{success}</p>}
+        <div className="min-h-screen bg-gray-100 py-10">
+            <div className=" bg-white rounded-lg shadow-md p-6">
+                <h2 className="text-2xl font-bold mb-6 text-center">Upload Image to Gallery</h2>
                 <input 
                     type="text" 
                     placeholder="Title" 
@@ -118,7 +118,11 @@ function FileUpload({ userName }) {
                     >
                         Cancel
                     </button>
+
+                    
                 </div>
+                {error && <p className="text-red-500 mb-4">{error}</p>}
+                {success && <p className="text-green-500 mb-4">{success}</p>}
             </div>
         </div>
     );
