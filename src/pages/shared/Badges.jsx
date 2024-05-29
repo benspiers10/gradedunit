@@ -34,6 +34,23 @@ const Badges = () => {
         setSearchTerm(event.target.value);
     };
 
+    const handlePrintBadge = (badge) => {
+        // Create a string with badge information
+        const badgeInfo = `
+            <div style="text-align: center;">
+                <h3>${badge.badge_name}</h3>
+                <img src="http://localhost:8081/images/badges/${badge.badge_img}" alt="${badge.badge_name}" style="max-width: 200px; max-height: 200px;">
+                <p>${badge.badge_info}</p>
+            </div>
+        `;
+
+        // Open a new window and print the badge information
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(badgeInfo);
+        printWindow.document.close();
+        printWindow.print();
+    };
+    
     // Filter badges based on search term
     const filteredBadges = badges.filter(badge =>
         badge.badge_name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -99,6 +116,7 @@ const Badges = () => {
                                 >
                                     Description
                                 </button>
+                                <button onClick={() => handlePrintBadge(badge)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full mt-4">Print Badge</button>
                             </div>
                         ))}
                     </div>
