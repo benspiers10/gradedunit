@@ -18,8 +18,8 @@ const Header = () => {
 
   // Render navigation for hamburger menu
   const renderMobileNav = () => (
-    <div className={`md:hidden ${isOpen ? 'block' : 'hidden'}`}>
-      <div className="flex flex-col items-center">
+    <div className={`md:hidden ${isOpen ? 'flex' : 'hidden'}`}>
+      <div className="flex flex-col gap-3 items-center py-20">
         {loggedIn ? (
           <>
             {role === 3 && <Link to="/AdminDash">Admin Dashboard</Link>}
@@ -74,17 +74,17 @@ const Header = () => {
 
   return (
     <nav className="w-full text-black p-4 shadow-sm bg-gray-200">
-      <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-center justify-between">
+      <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 flex md:items-center justify-between">
         <Link to='/'>
           <img className="h-20" src={Logo} alt="Scouts Logo" />
         </Link>
 
-        <div className="md:hidden">
-          <Hamburger toggled={isOpen} toggle={handleToggle} />
-        </div>
 
         {renderMobileNav()}
         {renderDesktopNav()}
+        <div className="md:hidden">
+          <Hamburger toggled={isOpen} toggle={handleToggle} />
+        </div>
       </div>
     </nav>
   );
