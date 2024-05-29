@@ -116,6 +116,7 @@ const Badges = () => {
                                 >
                                     Description
                                 </button>
+
                                 <button onClick={() => handlePrintBadge(badge)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full mt-4">Print Badge</button>
                             </div>
                         ))}
@@ -134,6 +135,7 @@ const Badges = () => {
                             Close
                         </button>
                     </div>
+                    
                 </div>
             )}
         </div>
