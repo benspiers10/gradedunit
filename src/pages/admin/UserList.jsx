@@ -61,7 +61,7 @@ const UserList = () => {
     return (
         <div className="container mx-auto px-4 py-8">
             {/* Link to Helper Availability page */}
-            <Link to="/AvailabilityList" className="dashboard-button float-right">Helper Availability</Link>
+            <Link to="/AvailabilityList" className="bg-gray-300 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300 float-right">Helper Availability</Link>
             <h2 className='pb-6 pt-10 text-2xl text-center'>User List</h2>
             <div className="overflow-x-auto">
                 <table className="w-full border-collapse border border-gray-300">
