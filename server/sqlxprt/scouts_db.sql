@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 29, 2024 at 12:13 AM
+-- Generation Time: May 29, 2024 at 10:09 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -220,7 +220,8 @@ CREATE TABLE `training_applications` (
 
 INSERT INTO `training_applications` (`application_id`, `user_id`, `training_type`, `status`) VALUES
 (2, 2, 'Helper Training', 'approved'),
-(3, 2, 'Scouts Badge', 'Training');
+(3, 2, 'Scouts Badge', 'Training'),
+(4, 2, 'Helper Training', 'Training');
 
 -- --------------------------------------------------------
 
@@ -244,14 +245,15 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `role`, `img_path`, `training_status`) VALUES
 (1, 'admin', 'admin@admin.com', '$2b$10$O9QS2GfcEyiop7G/EdoyBuzAmzzBqzwIciBqZJVGBoPjcR9huVxay', 3, 'images\\profileimg\\profileImage_1716822825609', 'not_applicable'),
-(2, 'ben', 'ben@helper.com', '$2b$10$thEMByfEhl6OtO2aUgIrw.dzf4iRrrdBn2uVlclfDbkOpqOrt0hwa', 2, 'images\\profileimg\\profileImage_1716841453404', 'trained'),
+(2, 'ben', 'ben@helper.com', '$2b$10$thEMByfEhl6OtO2aUgIrw.dzf4iRrrdBn2uVlclfDbkOpqOrt0hwa', 2, 'images\\profileimg\\profileImage_1716841453404', 'training'),
 (3, 'robbie', 'robbie@helper.com', '$2b$10$GHxh.fqT6k9Mt5zcoqedYey17UDLucyuBWK54nLaDMT9WlBtGvRRy', 2, 'images\\profileimg\\profileImage_1716932028744', 'not_applicable'),
 (4, 'craig', 'craig@helper.com', '$2b$10$3lUdNhP3bjt2SqfETLsUP.8VtgjYbELychT9MENpqhaErMyJd/u2i', 2, 'images\\profileimg\\profileImage_1716932061511', 'not_applicable'),
 (5, 'hamish', 'hamish@scout.com', '$2b$10$qfp/wuQMVmjSzKH0CG/VPOkVx8qWrfyjaBYn3h0Z1nAUwhcFbdyk.', 2, 'images\\profileimg\\profileImage_1716932195052', 'not_applicable'),
 (6, 'jonas', 'jonas@scout.com', '$2b$10$YCiGfWQHsW3YTHO/uXjF..Koq4lVMtOSHEA.l/icPG.h2XiCoI8sW', 1, 'images\\profileimg\\profileImage_1716931898070', 'not_applicable'),
 (7, 'jeff', 'jeff@scout.com', '$2b$10$tVtqjMeUpgOFE6pGreiypu8MIxfSUgch.NI57/B3yLtDtJYR7VbnO', 0, 'images\\profileimg\\profileImage_1716933584287', 'not_applicable'),
 (8, 'sam', 'sam@scout.com', '$2b$10$gEYXgCEsfOoz55HPqt4NsOAdfVJtHj1h4TbLax82NrytQ8rOS2muO', 0, 'images\\profileimg\\profileImage_1716581811012.jpg', 'not_applicable'),
-(9, 'louise', 'loise@parent.net', '$2b$10$GiX5Exx1wQ7vHCPcMzZa5OjElq8Qlm568ee4ggqWKpc7qHYpTF0yS', 1, 'images\\profileimg\\profileImage_1716934050717', 'not_applicable');
+(9, 'louise', 'loise@parent.net', '$2b$10$GiX5Exx1wQ7vHCPcMzZa5OjElq8Qlm568ee4ggqWKpc7qHYpTF0yS', 1, 'images\\profileimg\\profileImage_1716934050717', 'not_applicable'),
+(10, 'tester', 'test@mail.com', '$2b$10$C2cEl9byO8UD1Svn8R4Q4eufFWwd05LGApttON219pewvNwdaithS', 1, NULL, 'not_applicable');
 
 --
 -- Indexes for dumped tables
@@ -362,19 +364,19 @@ ALTER TABLE `helper_availability`
 -- AUTO_INCREMENT for table `helper_registration_requests`
 --
 ALTER TABLE `helper_registration_requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `training_applications`
 --
 ALTER TABLE `training_applications`
-  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables
