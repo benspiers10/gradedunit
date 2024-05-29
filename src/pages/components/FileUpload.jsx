@@ -3,6 +3,8 @@ import axios from "axios";
 import Resizer from "react-image-file-resizer"; // Import the image resizer library
 
 function FileUpload () {
+
+    // setting all consts with use state and getting username from localstorage
     const [file, setFile] = useState(null);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
@@ -75,7 +77,7 @@ function FileUpload () {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 py-10">
+        <div className="bg-gray-100 py-10">
             <div className=" bg-white rounded-lg shadow-md p-6">
                 <h2 className="text-2xl font-bold mb-6 text-center">Upload Image to Gallery</h2>
                 <input 
@@ -118,8 +120,6 @@ function FileUpload () {
                     >
                         Cancel
                     </button>
-
-                    
                 </div>
                 {error && <p className="text-red-500 mb-4">{error}</p>}
                 {success && <p className="text-green-500 mb-4">{success}</p>}

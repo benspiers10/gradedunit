@@ -1,12 +1,14 @@
+/* Define keyframes for fadeIn animation */
 @keyframes fadeIn {
   from {
-    opacity: 0;
+    opacity: 0; /* Start with opacity 0 */
   }
   to {
-    opacity: 1;
+    opacity: 1; /* End with opacity 1 */
   }
 }
 
+/* Apply fadeIn animation to elements with class animate-fadeIn */
 .animate-fadeIn {
-  animation: fadeIn 2s forwards;
+  animation: fadeIn 2s forwards; /* Apply fadeIn animation with a duration of 2 seconds */
 }

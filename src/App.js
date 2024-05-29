@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { logout, signin } from './store/authSlice';
+import { logout, signin } from './store/authSlice'; // Importing actions from authSlice
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Home from './pages/shared/Home';
@@ -19,7 +19,7 @@ import EventUpload from './pages/admin/components/EventUpload';
 import FileUpload from './pages/components/FileUpload';
 import Profile from './pages/shared/Profile';
 import Events from './pages/shared/Events';
-import EventDetail from './pages/shared/EventDetail';
+import EventDetail from './pages/components/EventDetail';
 import Availability from './pages/helper/HelperAvailability';
 import Training from './pages/helper/HelperTraining';
 import RegisterHelper from './pages/parent/RegisterHelper';
@@ -33,28 +33,28 @@ const App = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        // Check for token on page load
+        // Check for token, username, role, and user_id in localStorage on component mount
         const token = localStorage.getItem("token");
         const username = localStorage.getItem("username");
         const role = localStorage.getItem("role");
-        const user_id = localStorage.getItem("user_id"); // Retrieve user ID from localStorage
+        const user_id = localStorage.getItem("user_id");
 
         if (token && username && role && user_id) {
-            // Set user as authenticated with username and role
+            // If token, username, role, and user_id exist in localStorage, dispatch signin action
             dispatch(signin.fulfilled({ username, role, token, user_id }));
         } else {
-            // User is not authenticated
-            // Dispatch an action to logout
+            // If any of token, username, role, or user_id is missing, dispatch logout action
             dispatch(logout());
         }
     }, [dispatch]); // Run the effect only once on component mount
 
     return (
-        // creating routes
         <BrowserRouter>
             <Routes>
-                    <Route path="/Register" element={<Register />} />
-                    <Route path="/Login" element={<Login />} />
+                {/* Routes for unauthenticated users */}
+                <Route path="/Register" element={<Register />} />
+                <Route path="/Login" element={<Login />} />
+                {/* Routes for authenticated users */}
                 <Route path="/" element={<RootLayout />}>
                     {/* Main Pages */}
                     <Route index element={<Home />} />

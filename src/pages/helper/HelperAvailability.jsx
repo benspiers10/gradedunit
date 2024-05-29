@@ -2,17 +2,22 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function Availability() {
-    const [selectedDays, setSelectedDays] = useState([]);
-    const [otherHelpers, setOtherHelpers] = useState([]);
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(null);
-    const user_id = localStorage.getItem("user_id"); // Retrieve user ID from localStorage
+    // State variables
+    const [selectedDays, setSelectedDays] = useState([]); // Selected days for availability
+    const [otherHelpers, setOtherHelpers] = useState([]); // Other helpers' availability
+    const [error, setError] = useState(null); // Error message
+    const [success, setSuccess] = useState(null); // Success message
+
+    // Retrieve user ID from localStorage
+    const user_id = localStorage.getItem("user_id");
     console.log("User ID from localStorage:", user_id);
 
+    // Fetch other helpers' availability on component mount
     useEffect(() => {
         fetchOtherHelpersAvailability();
     }, []);
 
+    // Function to fetch other helpers' availability
     const fetchOtherHelpersAvailability = async () => {
         try {
             const res = await axios.get('http://localhost:8081/availability');
@@ -23,6 +28,7 @@ function Availability() {
         }
     };
 
+    // Function to handle day selection
     const handleDaySelection = (e) => {
         const day = e.target.value;
         setSelectedDays(prevState => {
@@ -31,31 +37,38 @@ function Availability() {
         });
     };
 
+    // Function to handle form submission
     const handleSubmit = async () => {
+        // Validate user ID and selected days
         if (!user_id || selectedDays.length === 0) {
             setError('Please select days to mark as available.');
             return;
         }
 
         try {
+            // Send availability data to the server
             const res = await axios.post('http://localhost:8081/availability', {
-                helper_id: user_id, // Use userId instead of helperId
+                helper_id: user_id,
                 available_days: selectedDays
             });
             setSuccess('Availability added successfully!');
             setSelectedDays([]);
-            fetchOtherHelpersAvailability();
+            fetchOtherHelpersAvailability(); // Fetch other helpers' availability after submission
         } catch (err) {
             console.error(err);
             setError('Failed to update availability. Please try again later.');
         }
     };
 
+    // Component rendering
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col items-center py-12">
+            {/* Error and success messages */}
             {error && <p className="text-red-500 mb-4">{error}</p>}
             {success && <p className="text-green-500 mb-4">{success}</p>}
+            {/* Title */}
             <h2 className="text-2xl font-bold mb-6">Select Your Available Days</h2>
+            {/* Checkbox for each day of the week */}
             <div className="flex flex-wrap justify-center mb-6">
                 {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(day => (
                     <div key={day} className="m-2">
@@ -72,9 +85,11 @@ function Availability() {
                     </div>
                 ))}
             </div>
+            {/* Submit button */}
             <button className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600" onClick={handleSubmit}>
                 Submit Availability
             </button>
+            {/* Other helpers' availability */}
             <h2 className="text-2xl font-bold mt-8 mb-4">Other Helpers' Availability</h2>
             <div className="w-full max-w-3xl bg-white p-6 rounded-lg shadow-md">
                 {otherHelpers.map(helper => (

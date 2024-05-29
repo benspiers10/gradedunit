@@ -1,11 +1,12 @@
-import Header from "../pages/components/Header";
-import { Outlet } from "react-router-dom";
+import Header from "../pages/components/Header"; // Importing the Header component
+import { Outlet } from "react-router-dom"; // Importing Outlet for nested routing
 
+// Component for the root layout of the application
 export default function RootLayout() {
-    return(
+    return (
         <div>
-            <Header />
-            <Outlet />
+            <Header /> {/* Rendering the Header component */}
+            <Outlet /> {/* Rendering the Outlet for nested routes */}
         </div>
-    )
+    );
 }

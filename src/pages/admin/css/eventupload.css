@@ -1,3 +1,4 @@
+/* input field for the eventupload */
 .input-field {
     width: 100%;
     margin-bottom: 1rem;
@@ -7,6 +8,7 @@
     outline: none;
 }
 
+/* creating the button */
 .btn-primary {
     background-color: #4caf50;
     color: white;
@@ -16,6 +18,7 @@
     cursor: pointer;
 }
 
+/* secondary coilour for button */
 .btn-secondary {
     background-color: #ccc;
     color: #333;
@@ -25,6 +28,7 @@
     cursor: pointer;
 }
 
+/* hover and focus buttons colours and opacity styles */
 .btn-primary:hover,
 .btn-secondary:hover {
     opacity: 0.8;

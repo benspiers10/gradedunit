@@ -5,12 +5,13 @@ import TrainingApplications from "./components/TrainingApplications";
 const Applications = () => {
     return(
         <div>
-        <HelperApplications />
+            {/* Render HelperApplications component */}
+            <HelperApplications />
 
-        <TrainingApplications />
-        
+            {/* Render TrainingApplications component */}
+            <TrainingApplications />
         </div>
-    )
-}
+    );
+};
 
 export default Applications;

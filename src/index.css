@@ -1,4 +1,11 @@
+/* Include Tailwind CSS base styles */
 @tailwind base;
+
+/* Include Tailwind CSS component styles */
 @tailwind components;
+
+/* Include Tailwind CSS utility styles */
 @tailwind utilities;
+
+/* Import CSS styles for react-image-gallery */
 @import "~react-image-gallery/styles/css/image-gallery.css";

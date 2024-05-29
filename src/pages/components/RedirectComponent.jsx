@@ -4,12 +4,13 @@ import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 const RedirectComponent = ({ to }) => {
+    // Get user role from Redux store
     const role = useSelector((state) => state.auth.role);
 
+    // Log user role on role change
     useEffect(() => {
         console.log(`User role: ${role}`);
     }, [role]);
-
 
     // Redirect based on user role
     switch (role) {

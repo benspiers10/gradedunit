@@ -7,16 +7,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/authSlice";
 
 const Header = () => {
+  // Retrieve login status and role from Redux store
   const loggedIn = useSelector((state) => state.auth.isLoggedIn);
   const role = useSelector((state) => state.auth.role);
+  // State to manage mobile menu visibility
   const [isOpen, setOpen] = useState(false);
   const dispatch = useDispatch();
 
+  // Toggle mobile menu visibility
   const handleToggle = () => {
-    setOpen(!isOpen); // Toggle the value of isOpen
+    setOpen(!isOpen);
   };
 
-  // Render navigation for hamburger menu
+  // Render navigation for mobile menu
   const renderMobileNav = () => (
     <div className={`md:hidden ${isOpen ? 'flex' : 'hidden'}`}>
       <div className="flex flex-col gap-3 items-center py-20">

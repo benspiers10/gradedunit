@@ -1,6 +1,8 @@
-import React from 'react';
+import React from 'react'; // Import React
 
+// Error component
 export default function Error() {
+    // JSX rendering
     return (
         <div className="h-screen flex items-center justify-center">
             <div className="text-center">

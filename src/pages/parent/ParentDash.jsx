@@ -1,30 +1,39 @@
-import { useSelector } from "react-redux";
 import React from 'react';
-import { Link } from 'react-router-dom';
-import Profile from "../shared/Profile"; // Adjust the path to where your Profile component is located
-import FileUpload from "../components/FileUpload";
+// import { useSelector } from 'react-redux'; // Redux import commented out
+import Profile from '../shared/Profile'; // Importing Profile component
+import FileUpload from '../components/FileUpload'; // Importing FileUpload component
+import HelperRegistration from './RegisterHelper'; // Importing HelperRegistration component
+
 
 const ParentDash = () => {
-    const user = useSelector((state) => state.auth.user);
+    // const user = useSelector((state) => state.auth.user); // Redux useSelector hook commented out
 
     return (
         <div className="min-h-screen bg-gray-100 py-10">
             <div className="container mx-auto px-10">
-                <h2 className="text-center text-3xl font-bold pb-6 text-gray-800">Dashboard, Welcome {user.name}!</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-6">
-                    <Link to="/RegisterHelper" className="dashboard-card col-span-1">
-                        <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
-                            <h3 className="text-lg font-semibold text-center text-gray-800">Register to become a Helper</h3>
-                        </div>
-                    </Link>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-6">
+                {/* Heading */}
+                <h2 className="text-center text-3xl font-bold pb-6 text-gray-800">
+                    Dashboard, Welcome Parent!
+                </h2>
+                {/* Two-column layout */}
+                <div className="flex flex-wrap -mx-4">
+                    {/* Left column for Profile component */}
+                    <div className="w-full lg:w-1/2 ">
                         <Profile />
-                        <FileUpload />
                     </div>
+                    {/* Right column for FileUpload and HelperRegistration components */}
+                    <div className="w-full lg:w-1/2 px-4 mb-6">
+                        <div className="flex flex-col space-y-6">
+                            {/* FileUpload component for uploading files */}
+                            <FileUpload />
+                            {/* HelperRegistration component for registering as a helper */}
+                            <HelperRegistration />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
 };
 
-export default ParentDash;
+export default ParentDash; // Exporting ParentDash component

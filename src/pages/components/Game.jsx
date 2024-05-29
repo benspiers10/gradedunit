@@ -1,5 +1,6 @@
 import React from 'react';
 
+// game component to display on games page, takeing props in from the component and then displaying from json on games page
 const Game = ({ image, url, name, description }) => {
     return (
         <div className="bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300 ease-in-out">
