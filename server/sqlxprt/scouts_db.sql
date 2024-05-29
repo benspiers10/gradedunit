@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 29, 2024 at 10:09 PM
+-- Generation Time: May 29, 2024 at 11:39 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -154,7 +154,8 @@ CREATE TABLE `gallery` (
 INSERT INTO `gallery` (`gallery_id`, `title`, `content`, `location`, `posted_by`, `gal_img`, `created_at`, `pending`) VALUES
 (14, 'Test', 'test', 'test', 'ben', 'images\\gallery\\image_1716927916362', '2024-05-28 20:25:16', 0),
 (15, 'test', 'test', 'test', 'ben', 'images\\gallery\\image_1716927926087', '2024-05-28 20:25:26', 0),
-(16, 'test', 'test', 'test', 'ben', 'images\\gallery\\image_1716927931741', '2024-05-28 20:25:31', 0);
+(16, 'test', 'test', 'test', 'ben', 'images\\gallery\\image_1716927931741', '2024-05-28 20:25:31', 0),
+(17, 'test', 'test', 'test', 'hamish', 'images\\gallery\\image_1717017614237', '2024-05-29 21:20:14', 0);
 
 -- --------------------------------------------------------
 
@@ -178,7 +179,12 @@ INSERT INTO `helper_availability` (`availability_id`, `helper_id`, `available_da
 (37, 2, 'Friday'),
 (38, 2, 'Saturday'),
 (39, 3, 'Tuesday'),
-(40, 3, 'Monday');
+(40, 3, 'Monday'),
+(41, 5, 'Monday'),
+(42, 5, 'Tuesday'),
+(43, 5, 'Wednesday'),
+(44, 5, 'Friday'),
+(45, 5, 'Saturday');
 
 -- --------------------------------------------------------
 
@@ -221,7 +227,8 @@ CREATE TABLE `training_applications` (
 INSERT INTO `training_applications` (`application_id`, `user_id`, `training_type`, `status`) VALUES
 (2, 2, 'Helper Training', 'approved'),
 (3, 2, 'Scouts Badge', 'Training'),
-(4, 2, 'Helper Training', 'Training');
+(4, 2, 'Helper Training', 'Training'),
+(5, 5, 'Scouts Badge', 'denied');
 
 -- --------------------------------------------------------
 
@@ -248,12 +255,11 @@ INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `role`, `img_pa
 (2, 'ben', 'ben@helper.com', '$2b$10$thEMByfEhl6OtO2aUgIrw.dzf4iRrrdBn2uVlclfDbkOpqOrt0hwa', 2, 'images\\profileimg\\profileImage_1716841453404', 'training'),
 (3, 'robbie', 'robbie@helper.com', '$2b$10$GHxh.fqT6k9Mt5zcoqedYey17UDLucyuBWK54nLaDMT9WlBtGvRRy', 2, 'images\\profileimg\\profileImage_1716932028744', 'not_applicable'),
 (4, 'craig', 'craig@helper.com', '$2b$10$3lUdNhP3bjt2SqfETLsUP.8VtgjYbELychT9MENpqhaErMyJd/u2i', 2, 'images\\profileimg\\profileImage_1716932061511', 'not_applicable'),
-(5, 'hamish', 'hamish@scout.com', '$2b$10$qfp/wuQMVmjSzKH0CG/VPOkVx8qWrfyjaBYn3h0Z1nAUwhcFbdyk.', 2, 'images\\profileimg\\profileImage_1716932195052', 'not_applicable'),
+(5, 'hamish', 'hamish@scout.com', '$2b$10$qfp/wuQMVmjSzKH0CG/VPOkVx8qWrfyjaBYn3h0Z1nAUwhcFbdyk.', 2, 'images\\profileimg\\profileImage_1716932195052', 'training'),
 (6, 'jonas', 'jonas@scout.com', '$2b$10$YCiGfWQHsW3YTHO/uXjF..Koq4lVMtOSHEA.l/icPG.h2XiCoI8sW', 1, 'images\\profileimg\\profileImage_1716931898070', 'not_applicable'),
 (7, 'jeff', 'jeff@scout.com', '$2b$10$tVtqjMeUpgOFE6pGreiypu8MIxfSUgch.NI57/B3yLtDtJYR7VbnO', 0, 'images\\profileimg\\profileImage_1716933584287', 'not_applicable'),
 (8, 'sam', 'sam@scout.com', '$2b$10$gEYXgCEsfOoz55HPqt4NsOAdfVJtHj1h4TbLax82NrytQ8rOS2muO', 0, 'images\\profileimg\\profileImage_1716581811012.jpg', 'not_applicable'),
-(9, 'louise', 'loise@parent.net', '$2b$10$GiX5Exx1wQ7vHCPcMzZa5OjElq8Qlm568ee4ggqWKpc7qHYpTF0yS', 1, 'images\\profileimg\\profileImage_1716934050717', 'not_applicable'),
-(10, 'tester', 'test@mail.com', '$2b$10$C2cEl9byO8UD1Svn8R4Q4eufFWwd05LGApttON219pewvNwdaithS', 1, NULL, 'not_applicable');
+(9, 'louise', 'loise@parent.net', '$2b$10$GiX5Exx1wQ7vHCPcMzZa5OjElq8Qlm568ee4ggqWKpc7qHYpTF0yS', 1, 'images\\profileimg\\profileImage_1716934050717', 'not_applicable');
 
 --
 -- Indexes for dumped tables
@@ -352,25 +358,25 @@ ALTER TABLE `events`
 -- AUTO_INCREMENT for table `gallery`
 --
 ALTER TABLE `gallery`
-  MODIFY `gallery_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `gallery_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `helper_availability`
 --
 ALTER TABLE `helper_availability`
-  MODIFY `availability_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `availability_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `helper_registration_requests`
 --
 ALTER TABLE `helper_registration_requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `training_applications`
 --
 ALTER TABLE `training_applications`
-  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
