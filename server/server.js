@@ -1,26 +1,33 @@
-const express = require('express');
-const mysql = require('mysql2/promise');
-const cors = require('cors');
-const bodyParser = require('body-parser')
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const multer = require('multer');
-const path = require('node:path'); 
+// Import required modules
+const express = require('express'); // Express framework for building web applications
+const mysql = require('mysql2/promise'); // MySQL client for Node.js with support for promises
+const cors = require('cors'); // Middleware to enable Cross-Origin Resource Sharing (CORS)
+const bodyParser = require('body-parser'); // Middleware to parse incoming request bodies
+const bcrypt = require('bcrypt'); // Library to hash passwords
+const jwt = require('jsonwebtoken'); // Library to handle JSON Web Tokens (JWT) for authentication
+const multer = require('multer'); // Middleware to handle file uploads
+const path = require('node:path'); // Node.js module to work with file and directory paths
 
+// Initialize the Express application
 const app = express();
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
-app.use(cors());
 
-//creating database connection using mysql database created and root connector
+// Middleware setup
+app.use(bodyParser.urlencoded({extended: false})); // Parse URL-encoded bodies
+app.use(bodyParser.json()); // Parse JSON bodies
+app.use(cors()); // Enable CORS for all routes
+
+// Database connection configuration
 const dbConfig = {
-    host: "localhost",
-    user: 'root',
-    password: '',
-    database: 'scouts_db'
+    host: "localhost", // Hostname of the MySQL server
+    user: 'root', // MySQL username
+    password: '', // MySQL password
+    database: 'scouts_db' // Name of the MySQL database
 };
 
+// Set the port for the Express server
 const PORT = process.env.PORT || 8081;
+
+// Start the Express server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
@@ -31,8 +38,11 @@ app.use((err, req, res, next) => {
     res.status(500).send({ error: 'Something went wrong!' });
 });
 
+// Configuration for bcrypt salt rounds
 const saltRounds = 10;
-const jwtSecretKey = 'your_secret_key'; // Set your secret key for JWT
+
+// Secret key for JWT (JSON Web Token)
+const jwtSecretKey = 'your_secret_key'; // leaving it as this just now for ease of use, for future i will be making one 
 
 
 // Serve static files from the public directory
@@ -41,7 +51,7 @@ app.use('/images/badges', express.static(path.join(__dirname, '../public/images/
 app.use('/images/events', express.static(path.join(__dirname, '../public/images/events')));
 app.use('/images/profileimg', express.static(path.join(__dirname, '../public/images/profileimg')));
 
-
+// Multer storage configuration
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         if (file.fieldname === 'profileImage') {
@@ -57,22 +67,29 @@ const storage = multer.diskStorage({
     }
 });
 
+// Multer upload configuration
 const upload = multer({
     storage: storage
 });
 
 // Function to generate JWT token
 const generateToken = (username, role) => {
-    return jwt.sign({ username, role }, jwtSecretKey, { expiresIn: '1h' }); // Expires in 1 hour
+    return jwt.sign({ username, role }, jwtSecretKey, { expiresIn: '15mins' }); // Expires in 15 minutes
 };
 
-// role corresponds to 0 = scouts, 1 = parents/carers, 2 = helpers, 3 = admin
+
+// Route to handle user signup
 app.post('/signup', async (req, res) => {
     const { username, email, password, role } = req.body;
 
     try {
+        // Hash the user's password
         const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        // Establish a connection to the database
         const connection = await mysql.createConnection(dbConfig);
+
+        // Insert user details into the 'users' table
         const [result] = await connection.execute("INSERT INTO users (username, password, email, role) VALUES (?, ?, ?, ?)", [username, hashedPassword, email, role]);
         
         // Retrieve the user_id of the newly created user
@@ -80,80 +97,107 @@ app.post('/signup', async (req, res) => {
 
         connection.end();
 
+        // Generate a token for the user
         const token = generateToken(username, role);
-        res.send({ username, role, token, user_id }); // Send token and user_id in response
+        
+        // Send response with username, role, token, and user_id
+        res.send({ username, role, token, user_id });
     } catch (err) {
+        // Handle error if user registration fails
         res.status(500).send(`Couldn't register user.`);
     }
 });
 
-
+// Handle user sign-in
 app.post('/signin', async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password } = req.body; // Extract username and password from request body
 
+    // Check if username and password are provided
     if (!username || !password) {
-        return res.status(400).send({ error: 'Username and password are required' });
+        return res.status(400).send({ error: 'Username and password are required' }); // Send 400 status with error message if not provided
     }
 
     try {
+        // Establish database connection
         const connection = await mysql.createConnection(dbConfig);
+
+        // Query user data based on username
         const [result] = await connection.execute("SELECT * FROM users WHERE username = ?", [username]);
+
+        // Close database connection
         connection.end();
 
+        // If user not found, send 401 status with error message
         if (result.length < 1) {
             return res.status(401).send({ error: 'Invalid username or password' });
         }
 
+        // Compare hashed password with provided password using bcrypt
         const match = await bcrypt.compare(password, result[0].password);
+
+        // If passwords match, generate JWT token
         if (match) {
             const token = generateToken(username, result[0].role); // Generate JWT token
+            // Send JSON response with user data and token
             return res.status(200).json({ 
                 username, 
                 role: result[0].role, 
                 user_id: result[0].user_id, // Include user_id in the response
                 token
-            }); // Include token in the response
+            }); 
         } else {
+            // If passwords don't match, send 401 status with error message
             return res.status(401).send({ error: 'Invalid username or password' });
         }
     } catch (err) {
+        // If any error occurs during the process, send 500 status with error message
         return res.status(500).send({ error: 'Internal server error' });
     }
 });
 
 
-
-// Submit image to gallery
+// Handle image submission to the gallery
 app.post('/gallery', upload.single('image'), async (req, res) => {
-    const { title, content, location, posted_by } = req.body;
-    const filePath = path.join('images/gallery', req.file.filename);
+    const { title, content, location, posted_by } = req.body; // Extract necessary data from request body
+    const filePath = path.join('images/gallery', req.file.filename); // Construct file path for the uploaded image
     const approvalStatus = 1; // Set initial approval status to pending
 
+    // SQL query to insert image details into the gallery table
     const sql = 'INSERT INTO gallery (title, content, location, posted_by, gal_img, pending) VALUES (?, ?, ?, ?, ?, ?)';
-    const values = [title, content, location, posted_by, filePath, approvalStatus];
+    const values = [title, content, location, posted_by, filePath, approvalStatus]; // Values to be inserted into the query
 
     try {
+        // Establish database connection
         const connection = await mysql.createConnection(dbConfig);
+        // Execute the SQL query with the provided values
         await connection.execute(sql, values);
+        // Close the database connection
         connection.end();
 
+        // Send successful response with status 201 and a message
         res.status(201).json({ message: 'Image submitted for approval' });
     } catch (error) {
+        // If an error occurs during the process, log the error and send a 500 status response with an error message
         console.error('Error submitting image:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
 
 
-// Get pending images for approval
+
+// Retrieve pending images awaiting approval
 app.get('/gallery/pending', async (req, res) => {
-    const sql = 'SELECT * FROM gallery WHERE pending = 1';
+    const sql = 'SELECT * FROM gallery WHERE pending = 1'; // SQL query to fetch pending images
 
     try {
+        // Establish database connection
         const connection = await mysql.createConnection(dbConfig);
+        // Execute the SQL query
         const [results] = await connection.execute(sql);
+        // Close the database connection
         connection.end();
 
+        // Map the query results to a more structured format
         const images = results.map(row => ({
             gallery_id: row.gallery_id,
             title: row.title,
@@ -162,44 +206,59 @@ app.get('/gallery/pending', async (req, res) => {
             gal_img: row.gal_img,
             pending: row.pending
         }));
+        
+        // Send the mapped images data in the response with status 200
         res.status(200).json(images);
     } catch (error) {
+        // If an error occurs during the process, log the error and send a 500 status response with an error message
         console.error('Error fetching pending images:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
 
-// Get approved images
+
+// Retrieve approved images
 app.get('/gallery/approved', async (req, res) => {
-    const sql = 'SELECT * FROM gallery WHERE pending = 0';
+    const sql = 'SELECT * FROM gallery WHERE pending = 0'; // SQL query to fetch approved images
 
     try {
+        // Establish database connection
         const connection = await mysql.createConnection(dbConfig);
+        // Execute the SQL query
         const [results] = await connection.execute(sql);
+        // Close the database connection
         connection.end();
 
+        // Send the query results in the response with status 200
         res.status(200).json(results);
     } catch (error) {
+        // If an error occurs during the process, log the error and send a 500 status response with an error message
         console.error('Error fetching approved images:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
 
-// Approve or reject image
-app.patch('/gallery/:id', async (req, res) => {
-    const { id } = req.params;
-    const { approvalStatus } = req.body;
 
-    const sql = 'UPDATE gallery SET pending = ? WHERE gallery_id = ?';
-    const values = [approvalStatus, id];
+// Update image approval status
+app.patch('/gallery/:id', async (req, res) => {
+    const { id } = req.params; // Extract the image ID from the request parameters
+    const { approvalStatus } = req.body; // Extract the approval status from the request body
+
+    const sql = 'UPDATE gallery SET pending = ? WHERE gallery_id = ?'; // SQL query to update the approval status
+    const values = [approvalStatus, id]; // Values to be updated
 
     try {
+        // Establish database connection
         const connection = await mysql.createConnection(dbConfig);
+        // Execute the SQL query to update the approval status
         await connection.execute(sql, values);
+        // Close the database connection
         connection.end();
 
+        // Send a success message in the response with status 200
         res.status(200).json({ message: 'Image status updated successfully' });
     } catch (error) {
+        // If an error occurs during the process, log the error and send a 500 status response with an error message
         console.error('Error updating image status:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
@@ -260,38 +319,54 @@ app.post('/events', upload.single('eventImage'), async (req, res) => {
 });
 
 
-app.get('/events', async (req, res) => {
-    const sql = 'SELECT * FROM events';
+// Update image approval status
+app.patch('/gallery/:id', async (req, res) => {
+    const { id } = req.params; // Extract the image ID from the request parameters
+    const { approvalStatus } = req.body; // Extract the approval status from the request body
+
+    const sql = 'UPDATE gallery SET pending = ? WHERE gallery_id = ?'; // SQL query to update the approval status
+    const values = [approvalStatus, id]; // Values to be updated
 
     try {
+        // Establish database connection
         const connection = await mysql.createConnection(dbConfig);
-        const [results] = await connection.execute(sql);
+        // Execute the SQL query to update the approval status
+        await connection.execute(sql, values);
+        // Close the database connection
         connection.end();
 
-        res.status(200).json(results);
+        // Send a success message in the response with status 200
+        res.status(200).json({ message: 'Image status updated successfully' });
     } catch (error) {
-        console.error('Error fetching events:', error);
+        // If an error occurs during the process, log the error and send a 500 status response with an error message
+        console.error('Error updating image status:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
 
 
-app.get('/events/:id', async (req, res) => {
-    const { id } = req.params;
-    const sql = 'SELECT * FROM events WHERE event_id = ?';
+
+// Update image approval status
+app.patch('/gallery/:id', async (req, res) => {
+    const { id } = req.params; // Extract the image ID from the request parameters
+    const { approvalStatus } = req.body; // Extract the approval status from the request body
+
+    const sql = 'UPDATE gallery SET pending = ? WHERE gallery_id = ?'; // SQL query to update the approval status
+    const values = [approvalStatus, id]; // Values to be updated
 
     try {
+        // Establish database connection
         const connection = await mysql.createConnection(dbConfig);
-        const [results] = await connection.execute(sql, [id]);
+        // Execute the SQL query to update the approval status
+        await connection.execute(sql, values);
+        // Close the database connection
         connection.end();
 
-        if (results.length > 0) {
-            res.status(200).json(results[0]);
-        } else {
-            res.status(404).json({ error: 'Event not found' });
-        }
+        // Send a success message in the response with status 200
+        res.status(200).json({ message: 'Image status updated successfully' });
     } catch (error) {
-        console.error('Error fetching event:', error);
+        // If an error occurs during the process, log the error and send a 500 status response with an error message
+        console.error('Error updating image status:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
@@ -337,15 +412,18 @@ app.delete('/users/:id', async (req, res) => {
     }
 });
 
+
+// Update user profile and contact information
 app.put('/users/:username', upload.single('profileImage'), async (req, res) => {
-    const { username } = req.params;
-    const { email, firstname, surname, address, phone } = req.body;
-    let profileImagePath = null;
+    const { username } = req.params; // Extract username from request parameters
+    const { email, firstname, surname, address, phone } = req.body; // Extract user profile data from request body
+    let profileImagePath = null; // Initialize profile image path variable
 
     try {
+        // Establish database connection
         const connection = await mysql.createConnection(dbConfig);
 
-        // Fetch the user ID and existing profile image path based on the username
+        // Fetch user ID and existing profile image path based on the username
         const [userResult] = await connection.execute("SELECT user_id, img_path FROM users WHERE username = ?", [username]);
         if (userResult.length === 0) {
             throw new Error('User not found');
@@ -358,12 +436,12 @@ app.put('/users/:username', upload.single('profileImage'), async (req, res) => {
             profileImagePath = path.join('images/profileimg', req.file.filename);
         }
 
-        // Update the user's profile
+        // Update the user's profile in the database
         const sql = "UPDATE users SET email = ?, img_path = ? WHERE username = ?";
         const values = [email, profileImagePath, username];
         await connection.execute(sql, values);
 
-        // Insert or update contact information
+        // Check if contact information exists
         const [contactInfoResult] = await connection.execute("SELECT * FROM contact_information WHERE user_fk = ?", [user.user_id]);
         if (contactInfoResult.length > 0) {
             // Update existing contact information
@@ -377,13 +455,18 @@ app.put('/users/:username', upload.single('profileImage'), async (req, res) => {
             await connection.execute(insertContactInfoSql, insertContactInfoValues);
         }
 
+        // Close the database connection
         connection.end();
+
+        // Send a success response
         res.status(200).json({ message: 'Profile updated successfully' });
     } catch (error) {
+        // If an error occurs, log the error and send a 500 status response with an error message
         console.error('Error updating profile:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
 
 //full profile account, with contactinformation passed through for view
 app.get('/users/:username', async (req, res) => {
@@ -465,24 +548,29 @@ app.get('/availability/:helper_id', async (req, res) => {
     }
 });
 
+// Add availability for a helper
 app.post('/availability', async (req, res) => {
-    const { helper_id, available_days } = req.body; // available_days should be an array of strings representing the days
+    const { helper_id, available_days } = req.body; // Extract helper ID and available days from request body
 
+    // Check if the request body contains valid data
     if (!helper_id || !Array.isArray(available_days) || available_days.length === 0) {
-        return res.status(400).json({ error: 'Invalid input data.' });
+        return res.status(400).json({ error: 'Invalid input data.' }); // Send 400 error response for invalid data
     }
 
-    const sql = 'INSERT INTO helper_availability (helper_id, available_day) VALUES (?, ?)';
+    const sql = 'INSERT INTO helper_availability (helper_id, available_day) VALUES (?, ?)'; // SQL query to insert availability data
     
     try {
-        const connection = await mysql.createConnection(dbConfig);
+        const connection = await mysql.createConnection(dbConfig); // Establish database connection
+        // Loop through available days and insert them into the database
         for (const day of available_days) {
             await connection.execute(sql, [helper_id, day]);
         }
-        connection.end();
+        connection.end(); // Close database connection
 
+        // Send success response with status 201
         res.status(201).json({ message: 'Availability added successfully' });
     } catch (error) {
+        // If an error occurs, log the error and send a 500 status response with an error message
         console.error('Error adding availability:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
@@ -732,12 +820,14 @@ app.get('/helper-availability', async (req, res) => {
     }
 });
 
+// Get badge progress for a user
 app.get('/users/:userId/badge-progress', async (req, res) => {
-    const { userId } = req.params;
+    const { userId } = req.params; // Extract user ID from request parameters
 
     try {
-        const connection = await mysql.createConnection(dbConfig);
+        const connection = await mysql.createConnection(dbConfig); // Establish database connection
 
+        // Execute SQL query to fetch badge progress for the user
         const [badges] = await connection.execute(`
             SELECT b.badge_id, b.badge_name, b.badge_info, b.badge_img,  bp.progress_percentage
             FROM badge_progress bp
@@ -745,10 +835,12 @@ app.get('/users/:userId/badge-progress', async (req, res) => {
             WHERE bp.user_id = ?
         `, [userId]);
 
-        connection.end();
+        connection.end(); // Close database connection
 
+        // Send badge progress data in the response with status 200
         res.status(200).json(badges);
     } catch (error) {
+        // If an error occurs, log the error and send a 500 status response with an error message
         console.error('Error fetching badges:', error);
         res.status(500).json({ error: 'Internal server error' });
     }

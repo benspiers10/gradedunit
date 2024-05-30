@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { logout, signin } from './store/authSlice'; // Importing actions from authSlice
+import { logout, signin } from './store/authSlice';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
+import useAutoLogout from './store/autoLogout'; // Importing the useAutoLogout hook
 import Home from './pages/shared/Home';
 import Register from './pages/shared/Register';
 import Login from './pages/shared/Login';
@@ -32,6 +33,9 @@ import Footer from './pages/components/Footer';
 
 const App = () => {
     const dispatch = useDispatch();
+
+    // Use the useAutoLogout hook
+    useAutoLogout();
 
     useEffect(() => {
         // Check for token, username, role, and user_id in localStorage on component mount
