@@ -12,7 +12,7 @@ const HelperDash = () => {
                 {/* Dashboard header */}
                 <h2 className="text-center text-3xl font-bold pb-6 text-gray-800">Dashboard, Welcome Helper!</h2>
                 {/* Grid layout for dashboard cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6">
                     {/* Link to Availability page */}
                     <Link to="/Availability" className="dashboard-card">
                         <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300">

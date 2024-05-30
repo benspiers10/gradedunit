@@ -63,7 +63,7 @@ const BadgeProgress = () => {
 
     // Render badge progress data
     return (
-        <div className="py-10">
+        <div className="pt-5">
             <div className="">
                 {badges.length > 0 ? (
                     // Map over badges array and render each badge

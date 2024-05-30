@@ -38,6 +38,7 @@ const Header = () => {
         ) : (
           <>
             <Link to="/Events">Whats On</Link>
+            <Link to="/Games">Games</Link>
             <Link to="/Gallery">Gallery</Link>
             <Link to="/Badges">Badges</Link>
             <Link to="/Register"><button className="bg-yellow-300 hover:bg-yellow-400 text-black font-bold py-2 px-4 rounded">Register</button></Link>
@@ -66,6 +67,7 @@ const Header = () => {
       ) : (
         <>
           <Link to="/Events">Whats On</Link>
+          <Link to="/Games">Games</Link>
           <Link to="/Gallery">Gallery</Link>
           <Link to="/Badges">Badges</Link>
           <Link to="/Register"><button className="bg-yellow-300 hover:bg-yellow-400 text-black font-bold py-2 px-4 rounded">Register</button></Link>

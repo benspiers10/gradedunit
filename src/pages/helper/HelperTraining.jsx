@@ -45,8 +45,8 @@ function TrainingApplication() {
 
     // Rendering the component
     return (
-        <div className="min-h-screen bg-gray-100 py-10">
-            <div className="max-w-lg w-full bg-white p-8 rounded-lg shadow-lg">
+        <div className=" bg-gray-100 ">
+            <div className="w-full bg-white p-8 rounded-lg shadow-lg">
                 {/* Form for submitting training application */}
                 <h2 className="text-2xl font-bold mb-4 text-center">Apply for Training</h2>
                 

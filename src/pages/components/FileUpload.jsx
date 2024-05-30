@@ -77,7 +77,7 @@ function FileUpload () {
     };
 
     return (
-        <div className="bg-gray-100 py-10">
+        <div className="bg-gray-100 pt-5">
             <div className=" bg-white rounded-lg shadow-md p-6">
                 <h2 className="text-2xl font-bold mb-6 text-center">Upload Image to Gallery</h2>
                 <input 

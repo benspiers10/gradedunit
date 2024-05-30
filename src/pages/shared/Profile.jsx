@@ -108,9 +108,9 @@ const Profile = () => {
 
     // Render profile information and edit form based on edit mode, getting input if edited into contact_information table on db
     return (
-        <div className="min-h-screen bg-gray-100 py-10">
+        <div className=" bg-gray-100 pt-5">
             <div className="container mx-auto px-4">
-                <div className="bg-white rounded-lg shadow-lg p-6 max-w-2xl mx-auto">
+                <div className="bg-white rounded-lg shadow-lg p-6 w-full mx-auto">
                     <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Profile</h2>
                     <div className="flex flex-col items-center">
                         {/* profile picture */}

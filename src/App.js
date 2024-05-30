@@ -6,7 +6,7 @@ import './App.css';
 import Home from './pages/shared/Home';
 import Register from './pages/shared/Register';
 import Login from './pages/shared/Login';
-import Dash from './pages/users/Dash';
+import Dash from './pages/user/Dash';
 import ParentDash from './pages/parent/ParentDash';
 import AdminDash from './pages/admin/AdminDash';
 import HelperDash from './pages/helper/HelperDash';
@@ -27,7 +27,8 @@ import Applications from './pages/admin/Applications';
 import HelperAvailabilityList from './pages/admin/components/AvailabilityList';
 import UserDetails from './pages/admin/components/UserDetails';
 import Games from './pages/shared/Games';
-import BadgeProgress from './pages/users/BadgeProgress';
+import BadgeProgress from './pages/user/BadgeProgress';
+import Footer from './pages/components/Footer';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -86,6 +87,7 @@ const App = () => {
                     <Route path="/UserDetails/:username" element={<UserDetails />} />
                     {/* Error route if page cannot be found */}
                     <Route path="*" element={<Error />} />
+                    <Route path="/Footer" element={<Footer />} />
                 </Route>
             </Routes>
         </BrowserRouter>

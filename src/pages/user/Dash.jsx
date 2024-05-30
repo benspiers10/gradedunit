@@ -9,7 +9,7 @@ const Dash = () => {
 
     return (
         <div className="min-h-screen bg-gray-100 py-10">
-            <div className="container mx-auto px-10">
+            <div className="container mx-auto">
                 {/* Dashboard title */}
                 <h2 className="text-center text-3xl font-bold pb-6 text-gray-800">Dashboard, Welcome Scout!</h2>
                 {/* Dashboard grid layout */}

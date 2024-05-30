@@ -1,0 +1,16 @@
+/* userlist.css */
+/* creating media query to hide userlist when on smaller devices */
+@media (max-width: 600px) {
+    .desktop-only {
+        display: none;
+    }
+    .mobile-message {
+        display: block;
+    }
+}
+
+@media (min-width: 601px) {
+    .mobile-message {
+        display: none;
+    }
+}
