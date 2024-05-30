@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 30, 2024 at 06:36 PM
+-- Generation Time: May 30, 2024 at 10:39 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -155,7 +155,9 @@ INSERT INTO `gallery` (`gallery_id`, `title`, `content`, `location`, `posted_by`
 (14, 'Test', 'test', 'test', 'ben', 'images\\gallery\\image_1716927916362', '2024-05-28 20:25:16', 0),
 (15, 'test', 'test', 'test', 'ben', 'images\\gallery\\image_1716927926087', '2024-05-28 20:25:26', 0),
 (16, 'test', 'test', 'test', 'ben', 'images\\gallery\\image_1716927931741', '2024-05-28 20:25:31', 0),
-(17, 'test', 'test', 'test', 'hamish', 'images\\gallery\\image_1717017614237', '2024-05-29 21:20:14', 0);
+(17, 'test', 'test', 'test', 'hamish', 'images\\gallery\\image_1717017614237', '2024-05-29 21:20:14', 0),
+(18, 'tes', 'test', 'test', 'ben', 'images\\gallery\\image_1717093899664', '2024-05-30 18:31:39', 1),
+(19, 'test', 'test', 'test', 'ben', 'images\\gallery\\image_1717094163335', '2024-05-30 18:36:03', 1);
 
 -- --------------------------------------------------------
 
@@ -227,7 +229,8 @@ INSERT INTO `training_applications` (`application_id`, `user_id`, `training_type
 (2, 2, 'Helper Training', 'approved'),
 (3, 2, 'Scouts Badge', 'Training'),
 (4, 2, 'Helper Training', 'Training'),
-(5, 5, 'Scouts Badge', 'denied');
+(5, 5, 'Scouts Badge', 'denied'),
+(6, 2, 'Helper Training', 'Training');
 
 -- --------------------------------------------------------
 
@@ -357,13 +360,13 @@ ALTER TABLE `events`
 -- AUTO_INCREMENT for table `gallery`
 --
 ALTER TABLE `gallery`
-  MODIFY `gallery_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `gallery_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `helper_availability`
 --
 ALTER TABLE `helper_availability`
-  MODIFY `availability_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `availability_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT for table `helper_registration_requests`
@@ -375,7 +378,7 @@ ALTER TABLE `helper_registration_requests`
 -- AUTO_INCREMENT for table `training_applications`
 --
 ALTER TABLE `training_applications`
-  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `users`
