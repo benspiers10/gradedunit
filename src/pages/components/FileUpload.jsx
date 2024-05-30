@@ -3,15 +3,14 @@ import axios from "axios";
 import Resizer from "react-image-file-resizer"; // Import the image resizer library
 
 function FileUpload () {
-
-    // setting all consts with use state and getting username from localstorage
+    // Setting all constants with useState and getting username from localStorage
     const [file, setFile] = useState(null);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [location, setLocation] = useState('');
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
-    const username = localStorage.getItem("username")
+    const username = localStorage.getItem("username");
 
     // Handle file selection and resize if necessary
     const handleFile = (e) => {
@@ -45,26 +44,25 @@ function FileUpload () {
             setError('All fields are required.');
             return;
         }
-    
+
         const formData = new FormData();
         formData.append('image', file);
         formData.append('title', title);
         formData.append('content', content);
         formData.append('location', location);
         formData.append('posted_by', username); // Include the user's name
-    
+
         axios.post('http://localhost:8081/gallery', formData)
             .then(res => {
                 console.log(res);
                 setSuccess('Image uploaded successfully!');
-                handleCancel(); // Reset the form after successful upload
+                setTimeout(handleCancel, 3000); // Add a 3-second delay before resetting the form
             })
             .catch(err => {
                 console.log(err);
                 setError('Failed to upload image. Please try again later.');
             });
     };
-
 
     // Reset form fields
     const handleCancel = () => {

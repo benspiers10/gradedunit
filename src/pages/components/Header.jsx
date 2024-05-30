@@ -29,6 +29,8 @@ const Header = () => {
             {role === 2 && <Link to="/HelperDash">Helper Dashboard</Link>}
             {role === 1 && <Link to="/ParentDash">Dashboard</Link>}
             {role === 0 && <Link to="/Dash">Dashboard</Link>}
+            <Link to="/Events">Whats On</Link>
+            <Link to="/Games">Games</Link>
             <Link to="/Gallery">Gallery</Link>
             <Link to="/Badges">Badges</Link>
             <Link className="bg-red-500 hover:bg-red-600 text-black font-bold py-2 px-4 rounded" to="/" onClick={() => dispatch(logout())}>
@@ -58,6 +60,8 @@ const Header = () => {
           {role === 2 && <Link to="/HelperDash">Helper Dashboard</Link>}
           {role === 1 && <Link to="/ParentDash">Dashboard</Link>}
           {role === 0 && <Link to="/Dash">Dashboard</Link>}
+          <Link to="/Events">Whats On</Link>
+          <Link to="/Games">Games</Link>
           <Link to="/Gallery">Gallery</Link>
           <Link to="/Badges">Badges</Link>
           <Link className="bg-red-500 hover:bg-red-600 text-black font-bold py-2 px-4 rounded" to="/" onClick={() => dispatch(logout())}>

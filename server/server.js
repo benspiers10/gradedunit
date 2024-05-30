@@ -807,14 +807,12 @@ app.get('/helper-availability', async (req, res) => {
     }
 });
 
-// Get badge progress for a user
 app.get('/users/:userId/badge-progress', async (req, res) => {
-    const { userId } = req.params; // Extract user ID from request parameters
+    const { userId } = req.params;
 
     try {
-        const connection = await mysql.createConnection(dbConfig); // Establish database connection
+        const connection = await mysql.createConnection(dbConfig);
 
-        // Execute SQL query to fetch badge progress for the user
         const [badges] = await connection.execute(`
             SELECT b.badge_id, b.badge_name, b.badge_info, b.badge_img,  bp.progress_percentage
             FROM badge_progress bp
@@ -822,12 +820,10 @@ app.get('/users/:userId/badge-progress', async (req, res) => {
             WHERE bp.user_id = ?
         `, [userId]);
 
-        connection.end(); // Close database connection
+        connection.end();
 
-        // Send badge progress data in the response with status 200
         res.status(200).json(badges);
     } catch (error) {
-        // If an error occurs, log the error and send a 500 status response with an error message
         console.error('Error fetching badges:', error);
         res.status(500).json({ error: 'Internal server error' });
     }

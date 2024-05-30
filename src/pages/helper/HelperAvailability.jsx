@@ -7,6 +7,7 @@ function Availability() {
     const [otherHelpers, setOtherHelpers] = useState([]); // Other helpers' availability
     const [error, setError] = useState(null); // Error message
     const [success, setSuccess] = useState(null); // Success message
+    const [canSubmit, setCanSubmit] = useState(true); // Can submit availability
 
     // Retrieve user ID from localStorage
     const user_id = localStorage.getItem("user_id");
@@ -15,6 +16,7 @@ function Availability() {
     // Fetch other helpers' availability on component mount
     useEffect(() => {
         fetchOtherHelpersAvailability();
+        checkUserAvailability();
     }, []);
 
     // Function to fetch other helpers' availability
@@ -25,6 +27,20 @@ function Availability() {
         } catch (err) {
             console.error(err);
             setError('Failed to fetch availability. Please try again later.');
+        }
+    };
+
+    // Function to check if the user has already posted availability
+    const checkUserAvailability = async () => {
+        try {
+            const res = await axios.get(`http://localhost:8081/availability/${user_id}`);
+            if (res.data.length > 0) {
+                setCanSubmit(false); // User already has availability set
+                setError('You have already posted your availability.');
+            }
+        } catch (err) {
+            console.error(err);
+            setError('Failed to check your availability. Please try again later.');
         }
     };
 
@@ -79,6 +95,7 @@ function Availability() {
                                 checked={selectedDays.includes(day)}
                                 onChange={handleDaySelection}
                                 className="form-checkbox text-blue-500"
+                                disabled={!canSubmit} // Disable checkbox if user already posted availability
                             />
                             <span className="ml-2 text-lg">{day}</span>
                         </label>
@@ -86,7 +103,11 @@ function Availability() {
                 ))}
             </div>
             {/* Submit button */}
-            <button className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600" onClick={handleSubmit}>
+            <button
+                className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                onClick={handleSubmit}
+                disabled={!canSubmit} // Disable button if user already posted availability
+            >
                 Submit Availability
             </button>
             {/* Other helpers' availability */}
