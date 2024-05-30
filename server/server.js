@@ -319,60 +319,48 @@ app.post('/events', upload.single('eventImage'), async (req, res) => {
 });
 
 
-// Update image approval status
-app.patch('/gallery/:id', async (req, res) => {
-    const { id } = req.params; // Extract the image ID from the request parameters
-    const { approvalStatus } = req.body; // Extract the approval status from the request body
-
-    const sql = 'UPDATE gallery SET pending = ? WHERE gallery_id = ?'; // SQL query to update the approval status
-    const values = [approvalStatus, id]; // Values to be updated
+// Get all events
+app.get('/events', async (req, res) => {
+    const sql = 'SELECT * FROM events'; // SQL query to select all events from the database
 
     try {
-        // Establish database connection
-        const connection = await mysql.createConnection(dbConfig);
-        // Execute the SQL query to update the approval status
-        await connection.execute(sql, values);
-        // Close the database connection
-        connection.end();
+        const connection = await mysql.createConnection(dbConfig); // Establish database connection
+        const [results] = await connection.execute(sql); // Execute SQL query to fetch events
+        connection.end(); // Close database connection
 
-        // Send a success message in the response with status 200
-        res.status(200).json({ message: 'Image status updated successfully' });
+        // Send events data in the response with status 200
+        res.status(200).json(results);
     } catch (error) {
         // If an error occurs during the process, log the error and send a 500 status response with an error message
-        console.error('Error updating image status:', error);
+        console.error('Error fetching events:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Get event by ID
+app.get('/events/:id', async (req, res) => {
+    const { id } = req.params; // Extract the event ID from the request parameters
+    const sql = 'SELECT * FROM events WHERE event_id = ?'; // SQL query to select event by ID
+
+    try {
+        const connection = await mysql.createConnection(dbConfig); // Establish database connection
+        const [results] = await connection.execute(sql, [id]); // Execute SQL query to fetch event by ID
+        connection.end(); // Close database connection
+
+        if (results.length > 0) {
+            res.status(200).json(results[0]); // If event found, send event data in the response with status 200
+        } else {
+            res.status(404).json({ error: 'Event not found' }); // If event not found, send error message with status 404
+        }
+    } catch (error) {
+        // If an error occurs during the process, log the error and send a 500 status response with an error message
+        console.error('Error fetching event:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
 
 
 
-// Update image approval status
-app.patch('/gallery/:id', async (req, res) => {
-    const { id } = req.params; // Extract the image ID from the request parameters
-    const { approvalStatus } = req.body; // Extract the approval status from the request body
-
-    const sql = 'UPDATE gallery SET pending = ? WHERE gallery_id = ?'; // SQL query to update the approval status
-    const values = [approvalStatus, id]; // Values to be updated
-
-    try {
-        // Establish database connection
-        const connection = await mysql.createConnection(dbConfig);
-        // Execute the SQL query to update the approval status
-        await connection.execute(sql, values);
-        // Close the database connection
-        connection.end();
-
-        // Send a success message in the response with status 200
-        res.status(200).json({ message: 'Image status updated successfully' });
-    } catch (error) {
-        // If an error occurs during the process, log the error and send a 500 status response with an error message
-        console.error('Error updating image status:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-
-// Get all users
 // Fetch all users with their training status
 app.get('/users', async (req, res) => {
     const sql = `
@@ -411,7 +399,6 @@ app.delete('/users/:id', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-
 
 // Update user profile and contact information
 app.put('/users/:username', upload.single('profileImage'), async (req, res) => {
