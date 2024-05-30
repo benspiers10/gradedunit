@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 29, 2024 at 11:39 PM
+-- Generation Time: May 30, 2024 at 06:36 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -204,8 +204,7 @@ CREATE TABLE `helper_registration_requests` (
 --
 
 INSERT INTO `helper_registration_requests` (`id`, `user_id`, `created_at`, `status`) VALUES
-(2, 5, '2024-05-23 18:51:19', 'approved'),
-(3, 9, '2024-05-23 19:01:23', 'denied');
+(2, 5, '2024-05-23 18:51:19', 'approved');
 
 -- --------------------------------------------------------
 
@@ -258,7 +257,7 @@ INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `role`, `img_pa
 (5, 'hamish', 'hamish@scout.com', '$2b$10$qfp/wuQMVmjSzKH0CG/VPOkVx8qWrfyjaBYn3h0Z1nAUwhcFbdyk.', 2, 'images\\profileimg\\profileImage_1716932195052', 'training'),
 (6, 'jonas', 'jonas@scout.com', '$2b$10$YCiGfWQHsW3YTHO/uXjF..Koq4lVMtOSHEA.l/icPG.h2XiCoI8sW', 1, 'images\\profileimg\\profileImage_1716931898070', 'not_applicable'),
 (7, 'jeff', 'jeff@scout.com', '$2b$10$tVtqjMeUpgOFE6pGreiypu8MIxfSUgch.NI57/B3yLtDtJYR7VbnO', 0, 'images\\profileimg\\profileImage_1716933584287', 'not_applicable'),
-(8, 'sam', 'sam@scout.com', '$2b$10$gEYXgCEsfOoz55HPqt4NsOAdfVJtHj1h4TbLax82NrytQ8rOS2muO', 0, 'images\\profileimg\\profileImage_1716581811012.jpg', 'not_applicable'),
+(8, 'sam', 'sam@scout.com', '$2b$10$gEYXgCEsfOoz55HPqt4NsOAdfVJtHj1h4TbLax82NrytQ8rOS2muO', 0, 'images\\profileimg\\profileImage_1717075879147', 'not_applicable'),
 (9, 'louise', 'loise@parent.net', '$2b$10$GiX5Exx1wQ7vHCPcMzZa5OjElq8Qlm568ee4ggqWKpc7qHYpTF0yS', 1, 'images\\profileimg\\profileImage_1716934050717', 'not_applicable');
 
 --
